@@ -6,9 +6,9 @@ import org.example.model.hero.HeroTypes;
 public class Warrior extends Hero {
     public Warrior(String name){
         this.name = name;
-        className = HeroTypes.WARRIOR.toString();
-        classModifierAttack = 1.2;
+        type = HeroTypes.WARRIOR;
+        classModifierAttack = 0.8;
         classModifierDefence = 1.2;
-        classModifierHitPoints = 0.7;
+        classModifierHitPoints = 1.2;
     }
 }

@@ -8,4 +8,10 @@ public abstract class Entity {
     protected String name;
     protected String typeName;
     protected int level;
+    protected String type;
+    EntityIdGenerator idGenerator;
+
+    public Entity() {
+        id = idGenerator.generateId();
+    }
 }

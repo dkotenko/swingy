@@ -4,12 +4,12 @@ import org.example.model.creature.AbstractFactory;
 
 public class HeroFactory implements AbstractFactory<Hero> {
 
-    public Hero create(String name, HeroTypes type) {
-        if (type == HeroTypes.WARRIOR)
+    public Hero create(String name, String type) {
+        if (HeroTypes.WARRIOR.equals(type))
             return new Warrior(name);
-        else if (type == HeroTypes.ROGUE)
+        else if (HeroTypes.ROGUE.equals(type))
             return new Rogue(name);
-        else if (type == HeroTypes.MAGE)
+        else if (HeroTypes.MAGE.equals(type))
             return new Mage(name);
         return null;
     }

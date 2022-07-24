@@ -1,18 +1,7 @@
 package org.example.model.item;
 
-public enum ItemTypes {
-    HELMET("Helmet"),
-    ARMOR("Armor"),
-    WEAPON("Weapon");
-
-    private final String text;
-
-    ItemTypes(final String text) {
-        this.text = text;
-    }
-
-    @Override
-    public String toString() {
-        return text;
-    }
+public class ItemTypes {
+    public final static String HELMET = "Helmet";
+    public final static String ARMOR = "Armor";
+    public final static String WEAPON = "Weapon";
 }

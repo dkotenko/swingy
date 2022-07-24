@@ -1,5 +1,5 @@
 package org.example.model.creature;
 
 public interface AbstractFactory<T> {
-    T create(String animalType) ;
+    T create(String name, String type) ;
 }
