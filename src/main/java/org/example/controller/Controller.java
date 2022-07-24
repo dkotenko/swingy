@@ -1,17 +1,15 @@
 package org.example.controller;
 
-import org.example.model.Model;
-import org.example.view.View;
+import org.example.model.GameModel;
+import org.example.view.SwingyView;
 
 public class Controller {
-    View view;
-    Model model;
+    SwingyView swingyView;
+    GameModel gameModel;
 
-    public Controller(View view, Model model)
+    public Controller(SwingyView swingyView, GameModel gameModel)
     {
-        this.view = view;
-        this.model = model;
+        this.swingyView = swingyView;
+        this.gameModel = gameModel;
     }
-
-
 }

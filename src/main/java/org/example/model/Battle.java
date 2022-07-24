@@ -1,21 +1,23 @@
-package org.example.controller;
+package org.example.model;
 import org.example.Handlers;
-import org.example.model.Monster;
-import org.example.model.Hero;
+import org.example.controller.Controller;
+import org.example.model.hero.Hero;
+import org.example.model.monster.Monster;
 
 public class Battle {
-    private static boolean isBattle(Controller controller)
+    private boolean isBattle(Controller controller)
     {
-        return controller.model;
+
+        return true;//return controller.model;
     }
 
-    public static void checkBattle(Controller controller)
+    public void checkBattle(Controller controller)
     {
-        if ()
+        if (true)
             ;
     }
 
-    public static void doBattle(Hero hero, Monster monster)
+    public void doBattle(Hero hero, Monster monster)
     {
         long damageToMonster = hero.getAttack() - monster.getDefence();
         long damageToHero = monster.getAttack() - hero.getDefence();
@@ -29,7 +31,7 @@ public class Battle {
         }
 
         if (hero.getHitPoints() <= 0) {
-            invokeEndGame();
+            //invokeEndGame();
             return;
         }
 
@@ -38,7 +40,7 @@ public class Battle {
         }
     }
 
-    public static String getReward(Hero hero, Monster monster)
+    public String getReward(Hero hero, Monster monster)
     {
         StringBuilder stringBuilder = new StringBuilder();
 
@@ -79,8 +81,5 @@ public class Battle {
             stringBuilder.append("There is no reward\n");
         }
         return stringBuilder.toString();
-
-        }
-
     }
 }
