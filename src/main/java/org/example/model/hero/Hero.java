@@ -6,9 +6,7 @@ public abstract class Hero extends Creature {
     protected String type;
     protected int currExp = 0;
     protected int nextLevelExp;
-    protected double classModifierAttack = 1;
-    protected double classModifierDefence = 1;
-    protected double classModifierHitPoints = 1;
+
 
     public Hero(){}
 

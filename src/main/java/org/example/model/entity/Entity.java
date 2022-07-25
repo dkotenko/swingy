@@ -9,6 +9,9 @@ public abstract class Entity {
     protected String typeName;
     protected int level;
     protected String type;
+    protected int basicAttack;
+    protected int basicDefence;
+    protected int basicHp;
     EntityIdGenerator idGenerator;
 
     public Entity() {
