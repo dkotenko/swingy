@@ -1,13 +1,9 @@
 package org.example;
+
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ConfigurableApplicationContext;
 
-import javax.swing.*;
-/**
- * Hello world!
- *
- */
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -20,19 +16,25 @@ public class App {
             "  name varchar(20),\r\n" + "  email varchar(20),\r\n" + "  country varchar(20),\r\n" +
             "  password varchar(20)\r\n" + "  );";
 
-
     public static void main(String[] args)
     {
+
         ConfigurableApplicationContext ctx = new SpringApplicationBuilder(App.class)
                 .headless(false).run(args);
 
-        SwingApp sw = new SwingApp();
-        sw.setVisible(true);
+        /*
+        if (guiMode) {
+            GuiView guiView = new GuiView();
+            guiView.setVisible(true);
+            Thread myThread = new Thread(guiView);
+            myThread.start();
+        }
+        */
+
 
 
         //App createTableExample = new App();
         //createTableExample.createTable();
-
     }
 
     public void createTable() throws SQLException {

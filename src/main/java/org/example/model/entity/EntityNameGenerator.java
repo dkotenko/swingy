@@ -26,7 +26,7 @@ public class EntityNameGenerator {
         builder.append(" ");
         builder.append(getRandomPrefix());
         builder.append(" ");
-        builder.append(entity.getTypeName());
+        builder.append(entity.getType());
         return builder.toString();
     }
 

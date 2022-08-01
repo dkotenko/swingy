@@ -6,7 +6,6 @@ import lombok.Data;
 public abstract class Entity {
     protected int id;
     protected String name;
-    protected String typeName;
     protected int level;
     protected String type;
     protected int basicAttack;

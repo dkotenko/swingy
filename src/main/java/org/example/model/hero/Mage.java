@@ -7,8 +7,8 @@ public class Mage extends Hero{
     public Mage(String name) {
         this.name = name;
         type = HeroTypes.MAGE;
-        classModifierAttack = 1.6;
-        classModifierDefence = 0.6;
-        classModifierHitPoints = 0.8;
+        attackModifier = 1.6;
+        defenceModifier = 0.6;
+        hpModifier = 0.8;
     }
 }

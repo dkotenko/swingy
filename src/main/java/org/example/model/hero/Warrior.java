@@ -7,8 +7,8 @@ public class Warrior extends Hero {
     public Warrior(String name){
         this.name = name;
         type = HeroTypes.WARRIOR;
-        classModifierAttack = 0.8;
-        classModifierDefence = 1.2;
-        classModifierHitPoints = 1.2;
+        attackModifier = 0.8;
+        defenceModifier = 1.2;
+        hpModifier = 1.2;
     }
 }

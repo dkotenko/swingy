@@ -1,6 +1,6 @@
 package org.example.model.hero;
 
-import org.example.model.creature.AbstractFactory;
+import org.example.model.entity.AbstractFactory;
 
 public class HeroFactory implements AbstractFactory<Hero> {
 

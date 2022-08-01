@@ -1,28 +1,44 @@
 package org.example.model.hero;
 
+import lombok.Data;
+import org.example.controller.GameController;
+import org.example.model.GameModel;
 import org.example.model.creature.Creature;
 
+import java.beans.PropertyChangeSupport;
+
+@Data
 public abstract class Hero extends Creature {
     protected String type;
-    protected int currExp = 0;
+    protected int currExp;
     protected int nextLevelExp;
+    protected int attackLevelUpBonus;
+    protected int defenceLevelUpBonus;
+    protected int hpLevelUpBonus;
+    private int heroId;
+    GameModel game;
+    GameController gameController;
+    PropertyChangeSupport propertyChangeSupport;
 
+    public Hero(){
+        super();
+        nextLevelExp = countLevelExp(2);
+        heroId = game.generateHeroId();
+        propertyChangeSupport = new PropertyChangeSupport(this);
+        //propertyChangeSupport.addPropertyChangeListener(gameController);
 
-    public Hero(){}
+    }
 
     public Hero(String name, String type) {
         this.name = name;
         this.type = type;
     }
 
-    public void recalcAttributes()
-    {
-        attack = (int)(classModifierAttack * (level + getWeapon()));
-        defence = (int)(classModifierDefence * (level + getArmor()));
-        hitPoints = (int)(classModifierHitPoints * (level + getHelm() * 5));
+    private int countLevelExp(int level) {
+        return (level * 1000 + (level - 1) * (level - 1) * 450);
     }
 
-    private int countNextLevelExp(int level) {
-        return (level * 1000 + (level - 1) * (level - 1) * 450);
+    void gainExp(int exp) {
+
     }
 }

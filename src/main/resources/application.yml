@@ -1,0 +1,14 @@
+spring:
+  main:
+    banner-mode: "off"
+  # gui, console; default - console
+  profiles:
+        active: console, gui
+        default: console
+
+swingy:
+  random:
+    spread: 0.2
+  window:
+    width: 800
+    height: 600

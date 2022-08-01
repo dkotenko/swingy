@@ -1,5 +1,4 @@
 package org.example.model;
-import java.util.Random;
 
 public class Map {
     private long size;

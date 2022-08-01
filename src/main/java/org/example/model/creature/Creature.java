@@ -1,6 +1,8 @@
 package org.example.model.creature;
 
 import lombok.Data;
+import lombok.RequiredArgsConstructor;
+import org.example.controller.RandomGenerator;
 import org.example.model.Position;
 import org.example.model.entity.Entity;
 import org.example.model.item.Armor;
@@ -8,21 +10,26 @@ import org.example.model.item.Helm;
 import org.example.model.item.Item;
 import org.example.model.item.Weapon;
 
-import java.util.ArrayList;
-
 @Data
 public abstract class Creature extends Entity {
+
     protected int attack;
     protected int defence;
     protected int hp;
+
+    protected double attackModifier;
+    protected double defenceModifier;
+    protected double hpModifier;
     protected Weapon weapon;
     protected Armor armor;
     protected Helm helm;
-    protected double attackModifier = 1;
-    protected double defenceModifier = 1;
-    protected double hpModifier = 1;
-    protected boolean strikesFirst;
     protected Position position;
+
+    private RandomGenerator randomGenerator;
+
+    public Creature() {
+        super();
+    }
 
     /**
      * ADHP - attack + defence + hp
@@ -70,5 +77,25 @@ public abstract class Creature extends Entity {
         basicAttack += item.getBasicAttack();
         basicDefence += item.getBasicDefence();
         basicHp += item.getBasicHp();
+    }
+
+    public void recalcAttributes()
+    {
+        attack = (int)(attackModifier * basicAttack);
+        defence = (int)(defenceModifier * basicDefence);
+        hp = (int)(hpModifier * basicHp);
+    }
+
+    public int attack(Creature creature) {
+        int damage = (int)(attack * randomGenerator.getRandomCoef()) - creature.getDefence();
+        if (damage <= 0) {
+            return 0;
+        }
+        creature.inflictDamage(damage);
+        return damage;
+    }
+
+    public void inflictDamage(int damage) {
+        hp -= damage;
     }
 }
