@@ -1,12 +1,11 @@
 package org.example.view;
 
+import lombok.Getter;
 import lombok.Setter;
 import org.example.Images;
-import org.example.ProfileTypes;
+import org.example.config.AppConfig;
 import org.example.controller.GameController;
 import org.example.model.GameState;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import javax.imageio.ImageIO;
@@ -16,28 +15,30 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.Scanner;
 
 @Service
-
+@Getter
 @Setter
-@Profile(ProfileTypes.GUI)
 public class GuiView extends JFrame implements SwingyView {
-    JFrame f;
-    GameController gameController;
-    @Value("${swingy.window.width}")
-    int windowWidth;
-    @Value("${swingy.window.height}")
-    int windowHeight;
+    private GameController gameController;
+    private final AppConfig appConfig;
     GameState gameState;
     private ShowAction [] showActions;
+    private boolean active;
+    private String viewType;
+    private JFrame f;
+
+
 
     interface ShowAction {
         void show();
     }
 
-    public GuiView() {
+    public GuiView(AppConfig appConfig) {
+        this.appConfig = appConfig;
+        viewType = ViewTypes.GUI;
         initActionsArray();
+        setUpFrame();
     }
 
     private void initActionsArray() {
@@ -48,12 +49,18 @@ public class GuiView extends JFrame implements SwingyView {
     }
 
     private void setUpFrame() {
-        setSize(windowWidth,windowHeight);//400 width and 500 height
+        f = this;
+        setSize(appConfig.getWindowWidth(),appConfig.getWindowHeight());
         setTitle("Swingy");
+        setResizable(false);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        //setVisible(false);
+        //dispose();
+        /*
         addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
             public void windowClosing(java.awt.event.WindowEvent windowEvent) {
-                if (JOptionPane.showConfirmDialog(f,
+                if (JOptionPane.showConfirmDialog(null,
                         "Are you sure you want to close this window?", "Close Window?",
                         JOptionPane.YES_NO_OPTION,
                         JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION){
@@ -61,7 +68,9 @@ public class GuiView extends JFrame implements SwingyView {
                 }
             }
         });
-        //setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+         */
+
     }
 
     public void showNewHero() {
@@ -78,18 +87,20 @@ public class GuiView extends JFrame implements SwingyView {
     }
 
     public void updateGameState(GameState gameState) {
-        if (gameState ==  this.gameState) {
+        if (gameState == this.gameState) {
             return;
         }
-        showActions[gameState.ordinal()].show();
+        this.gameState = gameState;
+        if (isActive()) {
+            showActions[gameState.ordinal()].show();
+        }
+
     }
 
 
     public void showStartMenu() {
 
-        //setVisible(true);
-        setUpFrame();
-        f = this;
+        System.out.println("here");
 
         //Welcome panel
         JPanel welcomePanel = new JPanel();
@@ -122,7 +133,7 @@ public class GuiView extends JFrame implements SwingyView {
         newHeroButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                showNewHero();
+                gameController.updateGameState(GameState.CREATE_HERO);
             }
         });
         newHeroButton.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -137,13 +148,15 @@ public class GuiView extends JFrame implements SwingyView {
         chooseHeroButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                showChooseHero();
+                gameController.updateGameState(GameState.CHOOSE_HERO);
             }
         });
         chooseHeroButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         welcomePanel.add(chooseHeroButton);
-        f.add(welcomePanel);
-        f.setVisible(true);
+        add(welcomePanel);
+
+        setVisible(true);
+        repaint();
     }
 
     private BufferedImage getImage(String name) {
@@ -157,5 +170,21 @@ public class GuiView extends JFrame implements SwingyView {
                     BufferedImage.TYPE_INT_RGB);
         }
         return image;
+    }
+
+    public void activate() {
+        active = true;
+        /*
+        show();
+        setVisible(true);
+        repaint();
+        */
+    }
+
+    public void deactivate() {
+        active = false;
+        setVisible(false);
+        dispose();
+        repaint();
     }
 }

@@ -13,4 +13,6 @@ public class HeroFactory implements AbstractFactory<Hero> {
             return new Mage(name);
         return null;
     }
+
+
 }

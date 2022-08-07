@@ -1,31 +1,34 @@
 package org.example.view;
 
+import lombok.Getter;
 import lombok.Setter;
-import org.example.ProfileTypes;
+import org.apache.commons.lang3.StringUtils;
 import org.example.controller.GameController;
 import org.example.model.GameState;
-import org.springframework.context.annotation.Profile;
-import org.springframework.scheduling.annotation.Async;
+import org.example.model.hero.Hero;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 @Service
+@Getter
 @Setter
-@Profile(ProfileTypes.CONSOLE)
 public class ConsoleView implements SwingyView {
     GameController gameController;
     private GuiView.ShowAction[] showActions;
     private GameState gameState;
-    private ConsoleReader consoleReader;
+    private boolean active;
+    private String viewType;
+
 
     interface ShowAction {
         void show();
     }
 
-    public ConsoleView(ConsoleReader consoleReader) {
+    public ConsoleView() {
+        viewType = ViewTypes.CONSOLE;
         initActionsArray();
-        consoleReader.setConsoleView(this);
     }
 
     private void initActionsArray() {
@@ -35,64 +38,138 @@ public class ConsoleView implements SwingyView {
         //showActions[GameState.CHOOSE_HERO.ordinal()] = () -> showChooseHero();
     }
 
+    public String readLine() {
+        Scanner scanner = new Scanner(System.in);
+        while (true) {
+            String line = scanner.nextLine();
+            if ("exit".equals(line)) {
+                System.exit(0);
+            } else if ("return".equals(line)) {
+                gameController.returnToParentGameState();
+            } else if (StringUtils.isBlank(line)) {
+                continue;
+            }
+            return line;
+        }
+    }
 
-    @Async
+    public int readInt() {
+        while (true) {
+            String s = readLine();
+            try {
+                return Integer.parseInt(s);
+            } catch (NumberFormatException e) {
+                System.err.println(String.format("invalid number \'%s\'. Please try again", s));
+                continue;
+            }
+        }
+    }
+
     public void updateGameState(GameState gameState) {
         if (gameState != this.gameState) {
-            showActions[gameState.ordinal()].show();
+            this.gameState = gameState;
+            if (isActive()) {
+                showActions[gameState.ordinal()].show();
+            }
         }
     }
 
     // TODO Validate hero name
-    private void createNewHero() {
-        System.out.println("Enter new hero name:");
-        Scanner scanner = new Scanner(System.in);
-        String name = scanner.nextLine();
+    private void createHero() {
+        String name = "";
         int n = 0;
+        while (true) {
+            System.out.println("Enter new hero name:");
+            name = readLine();
+            if (gameController.isHeroExists(name)) {
+                System.out.println(String.format(
+                        "Hero with name %s already exists. Please choose another one",
+                        name));
+                continue;
+            }
+            break;
+        }
+
+        String type = "";
         while (n < 1 || n > 3) {
             System.out.println("Choose new hero type:");
             System.out.println("1. Warrior");
             System.out.println("2. Rogue");
             System.out.println("3. Mage");
-            String type = scanner.nextLine();
-            n = Integer.parseInt(type);
+            n = readInt();
             if (n == 1 || n == 2 || n == 3) {
                 break ;
             }
-            System.out.println("Invalid type, please try again");
+            System.out.println(String.format("Invalid type \'%d\', please try again\n", n));
         }
-        gameController.createNewHero(name, new String[]{"", "Warrior", "Rogue", "Mage"}[n]);
+        String [] types = new String[]{"", "Warrior", "Rogue", "Mage"};
+        gameController.createHero(name, types[n]);
+        if (gameController.isHeroExists(name)) {
+            System.out.println(String.format("New hero created: %s, the %s\n", name, types[n]));
+        }
     }
 
     private void chooseHero() {
+        ArrayList<Hero> heroes = gameController.getHeroes();
 
+        int choice = 0;
+        if (heroes.size() == 0) {
+            System.out.println("Heroes hasn't been created yet. Return and create a new one");
+            return;
+        }
+
+        while (choice < 1 || choice > heroes.size()) {
+            System.out.println("List of existing heroes:");
+            for (int i = 0; i < heroes.size(); i++) {
+                System.out.println(String.format("%d. %s (%s)",
+                        i + 1, heroes.get(i).getName(), heroes.get(i).getType()));
+            }
+            choice = readInt();
+            if (choice < 1 || choice > heroes.size()) {
+                System.out.println(String.format(
+                        "Invalid hero number, please input value in range [1:%d]",
+                        heroes.size()));
+            } else {
+                break ;
+            }
+        }
+        Hero hero = heroes.get(choice - 1);
+        System.out.println(String.format("The game for %s (%s) is starting now",
+                hero.getName(),
+                hero.getType()));
+        gameController.chooseHero(hero);
+        gameController.startGame();
     }
 
-    @Async
     public void showStartMenu() {
         System.out.println(Messages.START_LOGO);
         System.out.println(Messages.START_MESSAGE);
         System.out.println(Messages.START_CREATE_OR_CHOOSE);
         while (true) {
-            System.out.println("Available actions:");
-            System.out.println("1. Create a hero");
-            System.out.println("2. Choose hero");
+            System.out.println("\nAvailable actions:");
+            System.out.println("1. " + Messages.START_CREATE_HERO);
+            System.out.println("2. " + Messages.START_CHOOSE_HERO);
 
-            int n = consoleReader. Integer.parseInt(line);
+            int n = readInt();
             if (n == 1) {
-                createNewHero();
-                break ;
+                createHero();
             } else if (n == 2) {
                 chooseHero();
-                break ;
             } else {
                 System.out.println("Invalid action, please try again");
             }
         }
-        System.out.println(Messages.CHOOSE_HERO_MESSAGE);
     }
 
     public void showStatus() {
 
+    }
+
+    public void activate() {
+        active = true;
+    }
+
+    public void deactivate() {
+        active = false;
     }
 }

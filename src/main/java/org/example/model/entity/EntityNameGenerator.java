@@ -1,7 +1,5 @@
 package org.example.model.entity;
 
-import org.example.model.entity.Entity;
-
 import java.util.Random;
 
 public class EntityNameGenerator {
@@ -43,7 +41,7 @@ public class EntityNameGenerator {
             case 5:
                 return "Legendary";
         }
-        return "Default";
+        return "Epic";
     }
 
     private String getRandomPrefix() {

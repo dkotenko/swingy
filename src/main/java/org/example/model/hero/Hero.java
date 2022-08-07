@@ -23,7 +23,6 @@ public abstract class Hero extends Creature {
     public Hero(){
         super();
         nextLevelExp = countLevelExp(2);
-        heroId = game.generateHeroId();
         propertyChangeSupport = new PropertyChangeSupport(this);
         //propertyChangeSupport.addPropertyChangeListener(gameController);
 
@@ -41,4 +40,6 @@ public abstract class Hero extends Creature {
     void gainExp(int exp) {
 
     }
+
+
 }

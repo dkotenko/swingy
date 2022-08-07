@@ -13,9 +13,9 @@ public class Messages {
         "                            |___/  |___/ \n";
 
     public static final String START_MESSAGE = "Welcome to Swingy RPG game\n";
-    public static final String START_CREATE_OR_CHOOSE = " Create a hero or choose an existing one\n";
+    public static final String START_CREATE_OR_CHOOSE = " Create a hero or choose an existing one";
     public static final String START_CREATE_HERO = "Create new hero";
-    public static final String START_CHOOSE_HERO = "Choose a hero";
+    public static final String START_CHOOSE_HERO = "Choose a hero and start the game";
 
     public static final String CREATE_HERO_MESSAGE = "Create new hero";
     public static final String CREATE_HERO_INPUT_NAME = "Input hero name";

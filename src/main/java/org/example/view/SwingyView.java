@@ -7,6 +7,9 @@ public interface SwingyView {
     public void showStartMenu();
     public void setGameController(GameController gameController);
     public void updateGameState(GameState gameState);
+    public void activate();
+    public void deactivate();
+    public String getViewType();
     //public void showHeroStats();
     //public void showMap();
     //public void createHero();

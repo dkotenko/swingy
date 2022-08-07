@@ -1,12 +1,9 @@
 package org.example.model.entity;
 
-import org.springframework.stereotype.Component;
-
-@Component
 public class EntityIdGenerator {
-    int currId = 0;
+    private static int currId = 0;
 
-    public int generateId() {
+    public static int generateId() {
         return currId++;
     }
 }
