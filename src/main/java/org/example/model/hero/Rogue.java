@@ -1,11 +1,20 @@
 package org.example.model.hero;
 
-import lombok.Data;
+import org.example.model.dto.HeroDTO;
 
-@Data
 public class Rogue extends Hero{
-    public Rogue(String name) {
-        this.name = name;
+
+    public Rogue(String name){
+        super(name);
+        setStats();
+    }
+
+    public Rogue(HeroDTO heroDTO) {
+        super(heroDTO);
+        setStats();
+    }
+
+    private void setStats() {
         type = HeroTypes.ROGUE;
         attackModifier = 1.2;
         defenceModifier = 0.8;

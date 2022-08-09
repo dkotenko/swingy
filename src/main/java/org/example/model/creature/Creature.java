@@ -1,14 +1,10 @@
 package org.example.model.creature;
 
 import lombok.Data;
-import lombok.RequiredArgsConstructor;
 import org.example.controller.RandomGenerator;
 import org.example.model.Position;
 import org.example.model.entity.Entity;
-import org.example.model.item.Armor;
-import org.example.model.item.Helm;
 import org.example.model.item.Item;
-import org.example.model.item.Weapon;
 
 @Data
 public abstract class Creature extends Entity {
@@ -20,9 +16,9 @@ public abstract class Creature extends Entity {
     protected double attackModifier;
     protected double defenceModifier;
     protected double hpModifier;
-    protected Weapon weapon;
-    protected Armor armor;
-    protected Helm helm;
+    protected int weapon;
+    protected int armor;
+    protected int helm;
     protected Position position;
 
     private RandomGenerator randomGenerator;
@@ -40,6 +36,7 @@ public abstract class Creature extends Entity {
         hp = (int)(basicHp * hpModifier);
     }
 
+    /*
     public Item getItemByType(String type) {
         if (weapon.getType().equals(type)) {
             return weapon;
@@ -60,6 +57,7 @@ public abstract class Creature extends Entity {
             helm = (Helm) item;
         }
     }
+    */
 
     public void unequipItem(Item item) {
         basicAttack -= item.getBasicAttack();
@@ -68,8 +66,9 @@ public abstract class Creature extends Entity {
 
     }
 
+    /*
     public void equipItem(Item item) {
-        Item oldItem = getItemByType(getType());
+        //Item oldItem = getItemByType(getType());
         if (oldItem != null) {
             unequipItem(oldItem);
         }
@@ -78,6 +77,7 @@ public abstract class Creature extends Entity {
         basicDefence += item.getBasicDefence();
         basicHp += item.getBasicHp();
     }
+    */
 
     public void recalcAttributes()
     {

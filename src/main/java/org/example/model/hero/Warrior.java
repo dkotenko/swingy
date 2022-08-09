@@ -1,11 +1,19 @@
 package org.example.model.hero;
 
-import org.example.model.hero.Hero;
-import org.example.model.hero.HeroTypes;
+import org.example.model.dto.HeroDTO;
 
 public class Warrior extends Hero {
     public Warrior(String name){
-        this.name = name;
+        super(name);
+        setStats();
+    }
+
+    public Warrior(HeroDTO heroDTO) {
+        super(heroDTO);
+        setStats();
+    }
+
+    private void setStats() {
         type = HeroTypes.WARRIOR;
         attackModifier = 0.8;
         defenceModifier = 1.2;

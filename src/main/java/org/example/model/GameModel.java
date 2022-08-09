@@ -1,15 +1,15 @@
 package org.example.model;
 
 import lombok.Data;
+import org.example.model.dto.HeroDTO;
 import org.example.model.hero.Hero;
 import org.example.model.hero.HeroFactory;
 import org.example.service.ValidationService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
+import org.example.service.repository.HeroRepository;
 import org.springframework.stereotype.Component;
 
-import javax.sql.DataSource;
 import javax.validation.ConstraintViolationException;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 @Component
@@ -21,16 +21,25 @@ public class GameModel {
     GameState currentState;
     GameState previousState;
     private final ValidationService validationService;
+    private final HeroRepository heroRepository;
 
-    @Autowired
-    @Qualifier("hikariDataSource")
-    private DataSource hikariDataSource;
-
-    public GameModel(ValidationService validationService) {
+    public GameModel(ValidationService validationService, HeroRepository heroRepository) {
         this.validationService = validationService;
+        this.heroRepository = heroRepository;
         currentState = GameState.START_MENU;
         previousState = GameState.START_MENU;
         heroes = new HashMap<>();
+        loadHeroes();
+    }
+
+    public void loadHeroes() {
+        ArrayList<HeroDTO> heroDTOS = new ArrayList<>();
+        heroRepository.findAll().forEach(heroDTOS::add);
+        HeroFactory heroFactory = new HeroFactory();
+        heroDTOS.forEach(heroDTO -> heroes.put(
+                heroDTO.getName(),
+                heroFactory.create(heroDTO)
+        ));
     }
 
     public void updateGameState(GameState state) {
@@ -42,6 +51,8 @@ public class GameModel {
         Hero hero = new HeroFactory().create(name, type);
         try {
             validationService.validateHero(hero);
+            heroRepository.save(new HeroDTO(hero));
+            System.out.println(heroRepository.findAll().iterator().hasNext());
             heroes.put(name, hero);
         } catch (ConstraintViolationException e) {
             System.out.println("Error: hero hadn't been created, invalid input:");

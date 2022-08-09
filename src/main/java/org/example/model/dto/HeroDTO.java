@@ -3,16 +3,18 @@ package org.example.model.dto;
 import lombok.Data;
 import org.example.model.hero.Hero;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.Id;
 
 @Data
 @Entity
-@Table(name="hero")
 public class HeroDTO {
+    @Id
     private int id;
     private String name;
     private String type;
+    @Column(name="curr_level")
     private int level;
     private int exp;
     private int helm;
@@ -26,8 +28,8 @@ public class HeroDTO {
         this.type = hero.getType();
         this.level = hero.getLevel();
         this.exp = hero.getCurrExp();
-        this.helm = hero.getHelm().getLevel();
-        this.armor = hero.getArmor().getLevel();
-        this.weapon = hero.getWeapon().getLevel();
+        this.helm = hero.getHelm();
+        this.armor = hero.getArmor();
+        this.weapon = hero.getWeapon();
     }
 }

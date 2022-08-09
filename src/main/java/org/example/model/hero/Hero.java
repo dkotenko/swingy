@@ -4,6 +4,7 @@ import lombok.Data;
 import org.example.controller.GameController;
 import org.example.model.GameModel;
 import org.example.model.creature.Creature;
+import org.example.model.dto.HeroDTO;
 
 import java.beans.PropertyChangeSupport;
 
@@ -20,12 +21,22 @@ public abstract class Hero extends Creature {
     GameController gameController;
     PropertyChangeSupport propertyChangeSupport;
 
-    public Hero(){
+    public Hero(String name){
         super();
+        this.name = name;
         nextLevelExp = countLevelExp(2);
         propertyChangeSupport = new PropertyChangeSupport(this);
         //propertyChangeSupport.addPropertyChangeListener(gameController);
 
+    }
+
+    public Hero(HeroDTO heroDTO) {
+        super();
+        setLevel(heroDTO.getLevel());
+        currExp =  heroDTO.getExp();
+        helm = heroDTO.getHelm();
+        armor = heroDTO.getArmor();
+        weapon = heroDTO.getWeapon();
     }
 
     public Hero(String name, String type) {
@@ -33,7 +44,14 @@ public abstract class Hero extends Creature {
         this.type = type;
     }
 
+    @Override
+    public void setLevel(int level) {
+        this.level = level;
+        nextLevelExp = countLevelExp(level);
+    }
+
     private int countLevelExp(int level) {
+
         return (level * 1000 + (level - 1) * (level - 1) * 450);
     }
 

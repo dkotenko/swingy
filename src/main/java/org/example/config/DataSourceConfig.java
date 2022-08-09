@@ -12,10 +12,8 @@ public class DataSourceConfig {
     @Qualifier("hikariDataSource")
     public DataSource dataSource(){
         HikariConfig hikariConfig = new HikariConfig();
-        hikariConfig.setDriverClassName("com.mysql.jdbc.Driver");
-        hikariConfig.setJdbcUrl("jdbc:mysql://localhost:3306/spring-test");
-        hikariConfig.setUsername("root");
-        hikariConfig.setPassword("admin");
+        hikariConfig.setDriverClassName("org.sqlite.JDBC");
+        hikariConfig.setJdbcUrl("jdbc:sqlite:swingy.db");
 
         hikariConfig.setMaximumPoolSize(5);
         hikariConfig.setConnectionTestQuery("SELECT 1");

@@ -1,5 +1,6 @@
 package org.example.model.hero;
 
+import org.example.model.dto.HeroDTO;
 import org.example.model.entity.AbstractFactory;
 
 public class HeroFactory implements AbstractFactory<Hero> {
@@ -14,5 +15,14 @@ public class HeroFactory implements AbstractFactory<Hero> {
         return null;
     }
 
-
+    public Hero create(HeroDTO heroDTO) {
+        String type = heroDTO.getType();
+        if (HeroTypes.WARRIOR.equals(type))
+            return new Warrior(heroDTO);
+        else if (HeroTypes.ROGUE.equals(type))
+            return new Rogue(heroDTO);
+        else if (HeroTypes.MAGE.equals(type))
+            return new Mage(heroDTO);
+        return null;
+    }
 }

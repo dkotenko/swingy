@@ -56,22 +56,7 @@ public class GameController {
         views.forEach(x-> x.setGameController(this));
         currView = getInitialCurrViev();
         currView.activate();
-        loadHeroes();
         updateGameState(GameState.START_MENU);
-    }
-
-    public void initJdbc() {
-        try {
-            Class.forName("oracle.jdbc.driver.OracleDriver");
-        }
-        catch(ClassNotFoundException ex) {
-            System.out.println("Error: unable to load driver class!");
-            System.exit(1);
-        }
-    }
-
-    public void loadHeroes() {
-
     }
 
     public void propertyChange(PropertyChangeEvent evt) {
@@ -88,6 +73,7 @@ public class GameController {
     }
 
     public ArrayList<Hero> getHeroes() {
+        System.out.println(gameModel.getHeroes().values().size());
         return new ArrayList<Hero>(gameModel.getHeroes().values());
     }
 
