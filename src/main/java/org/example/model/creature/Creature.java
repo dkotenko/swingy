@@ -1,17 +1,21 @@
 package org.example.model.creature;
 
+import lombok.Builder;
 import lombok.Data;
-import org.example.controller.RandomGenerator;
-import org.example.model.Position;
 import org.example.model.entity.Entity;
 import org.example.model.item.Item;
+import org.example.model.map.Position;
+import org.example.service.RandomGenerator;
 
 @Data
+@Builder
 public abstract class Creature extends Entity {
 
-    protected int attack;
-    protected int defence;
-    protected int hp;
+
+
+    protected int basicAttack;
+    protected int basicDefence;
+    protected int basicHp;
 
     protected double attackModifier;
     protected double defenceModifier;
@@ -21,19 +25,40 @@ public abstract class Creature extends Entity {
     protected int helm;
     protected Position position;
 
-    private RandomGenerator randomGenerator;
 
     public Creature() {
         super();
     }
 
+    public Creature(int basicAttack, int basicDefence, int basicHp) {
+        super();
+        this.basicAttack = basicAttack;
+        this.basicDefence = basicDefence;
+        this.basicHp = basicHp;
+    }
+
     /**
      * ADHP - attack + defence + hp
      */
-    private void recountAdhp() {
-        attack = (int)(basicAttack * attackModifier);
-        defence = (int)(basicDefence * defenceModifier);
-        hp = (int)(basicHp * hpModifier);
+
+    protected void setupBasics(int _attack, int _defence, int _hp) {
+        basicAttack = _attack;
+        basicDefence = _defence;
+        basicHp = _hp;
+        calculateAttributes();
+    }
+
+    public void calculateAttributes()
+    {
+        attack = (int)(attackModifier * (basicAttack + attackBonusPerLevel * level));
+        defence = (int)(defenceModifier * (basicDefence + defenceBonusPerLevel * level));
+        hp = (int)(hpModifier * basicHp + (basicHp + hpBonusPerLevel * level));
+    }
+
+    @Override
+    public void setLevel(int level) {
+        super.setLevel(level);
+        calculateAttributes();
     }
 
     /*
@@ -60,9 +85,9 @@ public abstract class Creature extends Entity {
     */
 
     public void unequipItem(Item item) {
-        basicAttack -= item.getBasicAttack();
-        basicDefence -= item.getBasicDefence();
-        basicHp -= item.getBasicHp();
+        basicAttack -= item.getAttack();
+        basicDefence -= item.getDefence();
+        basicHp -= item.getHp();
 
     }
 
@@ -79,15 +104,8 @@ public abstract class Creature extends Entity {
     }
     */
 
-    public void recalcAttributes()
-    {
-        attack = (int)(attackModifier * basicAttack);
-        defence = (int)(defenceModifier * basicDefence);
-        hp = (int)(hpModifier * basicHp);
-    }
-
     public int attack(Creature creature) {
-        int damage = (int)(attack * randomGenerator.getRandomCoef()) - creature.getDefence();
+        int damage = (int)(attack * RandomGenerator.getRandomCoef()) - creature.getDefence();
         if (damage <= 0) {
             return 0;
         }

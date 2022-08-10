@@ -4,6 +4,7 @@ import lombok.Data;
 import org.example.model.hero.dto.HeroDTO;
 import org.example.model.hero.Hero;
 import org.example.model.hero.HeroFactory;
+import org.example.model.map.GameMap;
 import org.example.service.ValidationService;
 import org.example.service.repository.HeroRepository;
 import org.springframework.stereotype.Component;
@@ -14,7 +15,7 @@ import java.util.ArrayList;
 @Component
 @Data
 public class GameModel {
-    Map map;
+    GameMap gameMap;
     Hero currentHero;
     GameState currentState;
     GameState previousState;
@@ -51,4 +52,9 @@ public class GameModel {
             System.out.println(e.getMessage());
         }
     }
+
+    public void startGame() {
+        gameMap = new GameMap(currentHero);
+    }
+
 }

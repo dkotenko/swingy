@@ -1,10 +1,9 @@
 package org.example.controller;
 import lombok.RequiredArgsConstructor;
-import org.example.Handlers;
-import org.example.controller.GameController;
 import org.example.model.creature.Creature;
 import org.example.model.hero.Hero;
 import org.example.model.monster.Monster;
+import org.example.service.RandomGenerator;
 import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
@@ -31,14 +30,23 @@ public class Battle {
      *
      * Monster strikes first
      */
-    public void doBattle(Hero hero, Monster monster)
+
+    public double getHeroChance(Hero hero, Monster monster) {
+        int winTimes = 0;
+        int simTimes = 100;
+        for (int i = 0; i < simTimes; i++) {
+            doBattle(hero, monster, false);
+        }
+
+        return winTimes / simTimes;
+    }
+
+    public void doBattle(Hero hero, Monster monster, boolean isPrinted)
     {
-        int turn = 0;
-        int heroHp = hero.getHp();
-        int monsterHp = monster.getHp();
         Creature attacker = hero;
         Creature defender = monster;
         Creature temp = null;
+        int heroHpToRestore = hero.getHp();
 
         while (attacker.getHp() > 0 && defender.getHp() > 0)
         {
@@ -47,12 +55,11 @@ public class Battle {
             attacker = temp;
 
             int damage = attacker.attack(defender);
-            System.out.println(String.format("%s caused (%d) damage to %s\n",
-                    attacker.getName(), damage, defender.getName()));
+            if (isPrinted) {
+                System.out.println(String.format("%s caused (%d) damage to %s\n",
+                        attacker.getName(), damage, defender.getName()));
+            }
         }
-
-
-
 
         if (hero.getHp() <= 0) {
             System.out.println("Hero died :(");

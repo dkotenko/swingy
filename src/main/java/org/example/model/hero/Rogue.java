@@ -19,5 +19,10 @@ public class Rogue extends Hero{
         attackModifier = 1.2;
         defenceModifier = 0.8;
         hpModifier = 1.2;
+        attackBonusPerLevel = 4;
+        defenceBonusPerLevel = 2;
+        hpBonusPerLevel = 4;
     }
+
+
 }

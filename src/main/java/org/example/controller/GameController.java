@@ -5,7 +5,6 @@ import org.example.model.GameModel;
 import org.example.model.GameState;
 import org.example.model.hero.HeroFactory;
 import org.example.model.hero.dto.HeroDTO;
-import org.example.model.hero.Hero;
 import org.example.view.SwingyView;
 import org.example.view.ViewTypes;
 import org.springframework.boot.ApplicationArguments;
@@ -104,7 +103,8 @@ public class GameController {
     }
 
     public void startGame() {
-
+        gameModel.startGame();
+        updateGameState(GameState.GAME_MAIN);
     }
 
 }

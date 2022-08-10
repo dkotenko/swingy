@@ -6,4 +6,7 @@ public class ItemFactory implements AbstractFactory<Item> {
     public Item create(String name, String type) {
         return null;
     }
+    public Item create(String type) {
+        return null;
+    }
 }

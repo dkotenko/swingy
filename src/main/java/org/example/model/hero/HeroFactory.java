@@ -5,6 +5,10 @@ import org.example.model.entity.AbstractFactory;
 
 public class HeroFactory implements AbstractFactory<Hero> {
 
+    public Hero create(String type) {
+        return create("default_name", type);
+    }
+
     public Hero create(String name, String type) {
         if (HeroTypes.WARRIOR.equals(type))
             return new Warrior(name);

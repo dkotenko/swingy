@@ -1,5 +1,6 @@
 package org.example.model.hero;
 
+import lombok.Builder;
 import lombok.Data;
 import org.example.controller.GameController;
 import org.example.model.GameModel;
@@ -9,25 +10,28 @@ import org.example.model.hero.dto.HeroDTO;
 import java.beans.PropertyChangeSupport;
 
 @Data
+@Builder
 public abstract class Hero extends Creature {
     protected String type;
     protected int currExp;
     protected int nextLevelExp;
-    protected int attackLevelUpBonus;
-    protected int defenceLevelUpBonus;
-    protected int hpLevelUpBonus;
     private int heroId;
     GameModel game;
     GameController gameController;
     PropertyChangeSupport propertyChangeSupport;
 
     public Hero(String name){
-        super();
+        super(5, 5, 50);
         this.name = name;
-        nextLevelExp = countLevelExp(2);
+        nextLevelExp = countLevelExp(level + 1);
         propertyChangeSupport = new PropertyChangeSupport(this);
-        //propertyChangeSupport.addPropertyChangeListener(gameController);
+    }
 
+
+
+    public static int countLevelExp(int level) {
+
+        return (level * 1000 + (level - 1) * (level - 1) * 450);
     }
 
     public Hero(HeroDTO heroDTO) {
@@ -37,6 +41,7 @@ public abstract class Hero extends Creature {
         helm = heroDTO.getHelm();
         armor = heroDTO.getArmor();
         weapon = heroDTO.getWeapon();
+
     }
 
     public Hero(String name, String type) {
@@ -46,17 +51,17 @@ public abstract class Hero extends Creature {
 
     @Override
     public void setLevel(int level) {
-        this.level = level;
+        super.setLevel(level);
         nextLevelExp = countLevelExp(level);
-    }
-
-    private int countLevelExp(int level) {
-
-        return (level * 1000 + (level - 1) * (level - 1) * 450);
     }
 
     void gainExp(int exp) {
 
+    }
+
+    @Override
+    public String toString() {
+        return super.toString();
     }
 
 
