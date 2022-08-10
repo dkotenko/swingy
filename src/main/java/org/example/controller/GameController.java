@@ -3,6 +3,8 @@ package org.example.controller;
 import lombok.Data;
 import org.example.model.GameModel;
 import org.example.model.GameState;
+import org.example.model.hero.HeroFactory;
+import org.example.model.hero.dto.HeroDTO;
 import org.example.model.hero.Hero;
 import org.example.view.SwingyView;
 import org.example.view.ViewTypes;
@@ -69,12 +71,11 @@ public class GameController {
     }
 
     public boolean isHeroExists(String name) {
-        return gameModel.getHeroes().containsKey(name);
+        return gameModel.isHeroExists(name);
     }
 
-    public ArrayList<Hero> getHeroes() {
-        System.out.println(gameModel.getHeroes().values().size());
-        return new ArrayList<Hero>(gameModel.getHeroes().values());
+    public ArrayList<HeroDTO> getHeroes() {
+        return gameModel.getHeroes();
     }
 
     public void updateGameState(GameState state) {
@@ -98,8 +99,8 @@ public class GameController {
         }
     }
 
-    public void chooseHero(Hero hero) {
-        gameModel.setCurrentHero(hero);
+    public void chooseHero(HeroDTO heroDTO) {
+        gameModel.setCurrentHero(new HeroFactory().create(heroDTO));
     }
 
     public void startGame() {

@@ -5,6 +5,7 @@ import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
 import org.example.controller.GameController;
 import org.example.model.GameState;
+import org.example.model.hero.dto.HeroDTO;
 import org.example.model.hero.Hero;
 import org.springframework.stereotype.Service;
 
@@ -110,7 +111,7 @@ public class ConsoleView implements SwingyView {
     }
 
     private void chooseHero() {
-        ArrayList<Hero> heroes = gameController.getHeroes();
+        ArrayList<HeroDTO> heroes = gameController.getHeroes();
 
         int choice = 0;
         if (heroes.size() == 0) {
@@ -121,8 +122,7 @@ public class ConsoleView implements SwingyView {
         while (choice < 1 || choice > heroes.size()) {
             System.out.println("List of existing heroes:");
             for (int i = 0; i < heroes.size(); i++) {
-                System.out.println(String.format("%d. %s (%s)",
-                        i + 1, heroes.get(i).getName(), heroes.get(i).getType()));
+                System.out.println(String.format("%d) %s", i + 1, heroes.get(i).toString()));
             }
             choice = readInt();
             if (choice < 1 || choice > heroes.size()) {
@@ -133,11 +133,11 @@ public class ConsoleView implements SwingyView {
                 break ;
             }
         }
-        Hero hero = heroes.get(choice - 1);
+        HeroDTO heroDTO = heroes.get(choice - 1);
         System.out.println(String.format("The game for %s (%s) is starting now",
-                hero.getName(),
-                hero.getType()));
-        gameController.chooseHero(hero);
+                heroDTO.getName(),
+                heroDTO.getType()));
+        gameController.chooseHero(heroDTO);
         gameController.startGame();
     }
 

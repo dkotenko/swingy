@@ -17,5 +17,6 @@ public abstract class Entity {
 
     public Entity() {
         id = EntityIdGenerator.generateId();
+        level = 1;
     }
 }

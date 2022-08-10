@@ -4,7 +4,7 @@ import lombok.Data;
 import org.example.controller.GameController;
 import org.example.model.GameModel;
 import org.example.model.creature.Creature;
-import org.example.model.dto.HeroDTO;
+import org.example.model.hero.dto.HeroDTO;
 
 import java.beans.PropertyChangeSupport;
 

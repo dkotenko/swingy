@@ -1,6 +1,6 @@
 package org.example;
 
-import org.example.model.dto.HeroDTO;
+import org.example.model.hero.dto.HeroDTO;
 import org.example.service.repository.HeroRepository;
 import org.junit.Assert;
 import org.junit.BeforeClass;

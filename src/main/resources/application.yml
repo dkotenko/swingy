@@ -2,13 +2,17 @@ spring:
   main:
     banner-mode: "off"
   datasource:
-    url: jdbc:h2:file:./db/swingy.db;DATABASE_TO_UPPER=false
-    name: sa
+    url: jdbc:h2:file:./src/main/resources/db/swingy.db;OLD_INFORMATION_SCHEMA=TRUE
+    name: ""
     password: ""
     initialization-mode: always
   jpa:
+    defer-datasource-initialization: true
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
+  sql:
+    init:
+      mode: always
 
 swingy:
   random:

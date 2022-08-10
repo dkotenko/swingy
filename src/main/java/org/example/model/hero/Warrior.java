@@ -1,6 +1,6 @@
 package org.example.model.hero;
 
-import org.example.model.dto.HeroDTO;
+import org.example.model.hero.dto.HeroDTO;
 
 public class Warrior extends Hero {
     public Warrior(String name){
