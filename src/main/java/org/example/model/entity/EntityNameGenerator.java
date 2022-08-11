@@ -18,7 +18,7 @@ public class EntityNameGenerator {
             "steel"
     };
 
-    public String generate(Entity entity) {
+    public static String generate(Entity entity) {
         StringBuilder builder = new StringBuilder();
         builder.append(getExpertise(entity.getLevel()));
         builder.append(" ");
@@ -28,7 +28,7 @@ public class EntityNameGenerator {
         return builder.toString();
     }
 
-    private String getExpertise(int level) {
+    private static String getExpertise(int level) {
         switch (level) {
             case 1:
                 return "Newbie";
@@ -44,7 +44,7 @@ public class EntityNameGenerator {
         return "Epic";
     }
 
-    private String getRandomPrefix() {
+    private static String getRandomPrefix() {
         int rnd = new Random().nextInt(prefixes.length);
         return prefixes[rnd];
     }

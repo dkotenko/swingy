@@ -1,6 +1,5 @@
 package org.example.model.entity;
 
-import lombok.Builder;
 import lombok.Data;
 
 import javax.validation.constraints.Size;

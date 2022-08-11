@@ -6,7 +6,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.example.controller.GameController;
 import org.example.model.GameState;
 import org.example.model.hero.dto.HeroDTO;
-import org.example.model.hero.Hero;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -35,6 +34,7 @@ public class ConsoleView implements SwingyView {
     private void initActionsArray() {
         showActions = new GuiView.ShowAction[GameState.GAME_STATE_NUM.ordinal()];
         showActions[GameState.START_MENU.ordinal()] = () -> showStartMenu();
+        showActions[GameState.GAME_MAIN.ordinal()] = () -> showGameMain();
         //showActions[GameState.CREATE_HERO.ordinal()] = () -> showNewHero();
         //showActions[GameState.CHOOSE_HERO.ordinal()] = () -> showChooseHero();
     }
@@ -165,6 +165,10 @@ public class ConsoleView implements SwingyView {
                 System.out.println("Invalid action, please try again");
             }
         }
+    }
+
+    public void showGameMain() {
+        System.out.println(gameController.getMapAsString());
     }
 
     public void showStatus() {

@@ -1,6 +1,5 @@
 package org.example.model.creature;
 
-import lombok.Builder;
 import lombok.Data;
 import lombok.ToString;
 import org.example.model.entity.Entity;
@@ -25,6 +24,7 @@ public abstract class Creature extends Entity {
     protected int armor;
     protected int helm;
     protected Position position;
+    protected int hpToRestore;
 
 
     public Creature() {
@@ -43,6 +43,7 @@ public abstract class Creature extends Entity {
         attack = (int)(attackModifier * (basicAttack + attackBonusPerLevel * level));
         defence = (int)(defenceModifier * (basicDefence + defenceBonusPerLevel * level));
         hp = (int)(hpModifier * basicHp + (basicHp + hpBonusPerLevel * level));
+        hpToRestore = hp;
     }
 
     @Override
@@ -79,6 +80,10 @@ public abstract class Creature extends Entity {
         basicDefence -= item.getDefence();
         basicHp -= item.getHp();
 
+    }
+
+    public void restoreHp() {
+        hp = hpToRestore;
     }
 
     /*

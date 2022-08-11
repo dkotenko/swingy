@@ -1,7 +1,5 @@
 package org.example.model.hero;
 
-import lombok.Builder;
-import lombok.experimental.SuperBuilder;
 import org.example.model.hero.dto.HeroDTO;
 
 public class Warrior extends Hero {
@@ -18,11 +16,11 @@ public class Warrior extends Hero {
     private void setStats() {
         type = HeroTypes.WARRIOR;
         attackModifier = 0.8;
-        defenceModifier = 1.2;
+        defenceModifier = 1;
         hpModifier = 1.2;
-        attackBonusPerLevel = 2;
-        defenceBonusPerLevel = 5;
-        hpBonusPerLevel = 3;
+        attackBonusPerLevel = 4;
+        defenceBonusPerLevel = 2;
+        hpBonusPerLevel = 4;
         updateAttributes();
     }
 }

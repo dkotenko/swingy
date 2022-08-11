@@ -1,6 +1,5 @@
 package org.example.model.hero;
 
-import lombok.Builder;
 import lombok.Data;
 import lombok.ToString;
 import org.example.controller.GameController;
@@ -22,7 +21,7 @@ public abstract class Hero extends Creature {
     PropertyChangeSupport propertyChangeSupport;
 
     public Hero(String name){
-        super(5, 5, 25);
+        super(1, 1, 10);
         this.name = name;
         nextLevelExp = countLevelExp(level + 1);
         propertyChangeSupport = new PropertyChangeSupport(this);
@@ -32,7 +31,6 @@ public abstract class Hero extends Creature {
 
 
     public static int countLevelExp(int level) {
-
         return (level * 1000 + (level - 1) * (level - 1) * 450);
     }
 

@@ -17,8 +17,8 @@ public class Mage extends Hero{
     private void setStats() {
         type = HeroTypes.MAGE;
         attackModifier = 1.6;
-        defenceModifier = 0.6;
-        hpModifier = 0.8;
+        defenceModifier = 0.4;
+        hpModifier = 1;
         attackBonusPerLevel = 5;
         defenceBonusPerLevel = 2;
         hpBonusPerLevel = 3;

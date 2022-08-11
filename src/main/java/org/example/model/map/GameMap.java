@@ -1,6 +1,7 @@
 package org.example.model.map;
 
 import lombok.Data;
+import org.example.controller.VisibleMap;
 import org.example.model.hero.Hero;
 import org.example.model.monster.Monster;
 import org.example.model.monster.MonsterFactory;
@@ -14,14 +15,18 @@ public class GameMap {
     private int level;
     private GameMapCell[][] cells;
     private ArrayList<Monster> monsters;
+    private Hero hero;
+    private final static int visibleSize = 9;
 
     public GameMap(Hero hero)
     {
         this.level = hero.getLevel();
-        size = (level - 1) * 5 + 10 - 1;
+        this.hero = hero;
+        size = countSize(level);
         cells = new GameMapCell[size][size];
         hero.setPosition(new Position(size / 2, size / 2));
         initCells();
+        populate();
     }
 
     private void initCells() {
@@ -36,6 +41,10 @@ public class GameMap {
         }
     }
 
+    public static int countSize(int level) {
+        return (level - 1) * 5 + 10 - 1;
+    }
+
     public void populate() {
         int monstersHpPerMap =  Hero.countLevelExp(level);
         int defaultAttempts = 10;
@@ -47,9 +56,9 @@ public class GameMap {
             );
             int attempts = defaultAttempts;
             while (attempts-- > 0) {
-                int x = RandomGenerator.getRandom().nextInt();
-                int y = RandomGenerator.getRandom().nextInt();
-                if (cells[y][x].isEmpty()) {
+                int x = RandomGenerator.getRandom().nextInt(size);
+                int y = RandomGenerator.getRandom().nextInt(size);
+                if (!cells[y][x].containsMonster()) {
                     cells[y][x].setMonster(monster);
                     monster.setPosition(new Position(y, x));
                     isSet = true;
@@ -65,5 +74,34 @@ public class GameMap {
 
     private boolean isCenter(Position position) {
         return position.getX() == size / 2 && position.getY() == size / 2;
+    }
+
+    public VisibleMap getVisibleMap() {
+        VisibleMap visibleMap = new VisibleMap(visibleSize);
+        int minY = hero.getPosition().getY() - visibleSize / 2;
+        int maxY = hero.getPosition().getY() + visibleSize / 2;
+        int minX = hero.getPosition().getX() - visibleSize / 2;
+        int maxX = hero.getPosition().getX() + visibleSize / 2;
+        for (int i = minY; i <= maxY; i++) {
+            for (int j = minX; i <= maxX; j++) {
+                visibleMap.getCells()[i][j].setPosition(new Position(i, j));
+                if (i < 0 || i >= size) {
+                    continue;
+                }
+                if (j < 0 || j >= size) {
+                    continue;
+                }
+                if (cells[i][j].containsMonster()) {
+                    visibleMap.getCells()[i][j].setType(
+                            cells[i][j].getMonster().getType()
+                    );
+                } else if (cells[i][j].containsHero()) {
+                    visibleMap.getCells()[i][j].setType(
+                            cells[i][j].getHero().getType()
+                    );
+                }
+            }
+        }
+        return visibleMap;
     }
 }

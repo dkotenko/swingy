@@ -5,14 +5,14 @@ import org.example.model.creature.Creature;
 public class Monster extends Creature {
     public Monster()
     {
-        super(4, 4, 20);
+        super(0, 0, 10);
         setStats();
         updateAttributes();
     }
 
     protected void setStats() {
-        attackBonusPerLevel = 4;
-        defenceBonusPerLevel = 4;
-        hpBonusPerLevel = 4;
+        attackBonusPerLevel = 3;
+        defenceBonusPerLevel = 3;
+        hpBonusPerLevel = 3;
     }
 }

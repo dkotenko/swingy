@@ -16,8 +16,8 @@ public class Rogue extends Hero{
 
     private void setStats() {
         type = HeroTypes.ROGUE;
-        attackModifier = 1.2;
-        defenceModifier = 0.8;
+        attackModifier = 1.4;
+        defenceModifier = 0.6;
         hpModifier = 1.2;
         attackBonusPerLevel = 4;
         defenceBonusPerLevel = 2;
