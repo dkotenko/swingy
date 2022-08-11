@@ -5,7 +5,7 @@ import org.example.model.creature.Creature;
 public class Monster extends Creature {
     public Monster()
     {
-        super(4, 4, 40);
+        super(4, 4, 20);
         setStats();
         updateAttributes();
     }

@@ -12,5 +12,6 @@ public class Mushroom extends Monster{
         attackModifier = 1.2;
         defenceModifier = 0.2;
         hpModifier = 1.6;
+        updateAttributes();
     }
 }

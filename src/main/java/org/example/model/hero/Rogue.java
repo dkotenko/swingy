@@ -22,6 +22,7 @@ public class Rogue extends Hero{
         attackBonusPerLevel = 4;
         defenceBonusPerLevel = 2;
         hpBonusPerLevel = 4;
+        updateAttributes();
     }
 
 

@@ -12,6 +12,7 @@ public class Skeleton extends Monster{
         attackModifier = 0.75;
         defenceModifier = 1.5;
         hpModifier = 0.75;
+        updateAttributes();
     }
 
 

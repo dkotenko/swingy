@@ -106,4 +106,8 @@ public abstract class Creature extends Entity {
     public void inflictDamage(int damage) {
         hp -= damage;
     }
+
+    public String statsToString() {
+        return String.format("(attack=%d, defence=%d, hp=%d)", attack, defence, hp);
+    }
 }

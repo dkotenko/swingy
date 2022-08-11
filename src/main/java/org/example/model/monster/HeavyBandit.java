@@ -13,5 +13,6 @@ public class HeavyBandit extends Monster{
         attackModifier = 1.2;
         defenceModifier = 0.9;
         hpModifier = 0.9;
+        updateAttributes();
     }
 }

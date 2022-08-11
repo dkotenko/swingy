@@ -22,5 +22,6 @@ public class Mage extends Hero{
         attackBonusPerLevel = 5;
         defenceBonusPerLevel = 2;
         hpBonusPerLevel = 3;
+        updateAttributes();
     }
 }

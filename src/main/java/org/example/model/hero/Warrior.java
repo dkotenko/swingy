@@ -23,5 +23,6 @@ public class Warrior extends Hero {
         attackBonusPerLevel = 2;
         defenceBonusPerLevel = 5;
         hpBonusPerLevel = 3;
+        updateAttributes();
     }
 }

@@ -121,11 +121,17 @@ public class ConsoleView implements SwingyView {
 
         while (choice < 1 || choice > heroes.size()) {
             System.out.println("List of existing heroes:");
-            for (int i = 0; i < heroes.size(); i++) {
+            int i = 0;
+            while (i < heroes.size()) {
                 System.out.println(String.format("%d) %s", i + 1, heroes.get(i).toString()));
+                i++;
             }
+            System.out.println(String.format("\n%d. return to previous menu", i + 1));
             choice = readInt();
             if (choice < 1 || choice > heroes.size()) {
+                if (choice == heroes.size() + 1) {
+                    return;
+                }
                 System.out.println(String.format(
                         "Invalid hero number, please input value in range [1:%d]",
                         heroes.size()));

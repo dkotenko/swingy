@@ -22,7 +22,7 @@ public abstract class Hero extends Creature {
     PropertyChangeSupport propertyChangeSupport;
 
     public Hero(String name){
-        super(5, 5, 50);
+        super(5, 5, 25);
         this.name = name;
         nextLevelExp = countLevelExp(level + 1);
         propertyChangeSupport = new PropertyChangeSupport(this);
