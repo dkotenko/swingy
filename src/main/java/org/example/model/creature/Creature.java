@@ -2,13 +2,14 @@ package org.example.model.creature;
 
 import lombok.Builder;
 import lombok.Data;
+import lombok.ToString;
 import org.example.model.entity.Entity;
 import org.example.model.item.Item;
 import org.example.model.map.Position;
 import org.example.service.RandomGenerator;
 
 @Data
-@Builder
+@ToString(callSuper = true)
 public abstract class Creature extends Entity {
 
 
@@ -37,18 +38,7 @@ public abstract class Creature extends Entity {
         this.basicHp = basicHp;
     }
 
-    /**
-     * ADHP - attack + defence + hp
-     */
-
-    protected void setupBasics(int _attack, int _defence, int _hp) {
-        basicAttack = _attack;
-        basicDefence = _defence;
-        basicHp = _hp;
-        calculateAttributes();
-    }
-
-    public void calculateAttributes()
+    public void updateAttributes()
     {
         attack = (int)(attackModifier * (basicAttack + attackBonusPerLevel * level));
         defence = (int)(defenceModifier * (basicDefence + defenceBonusPerLevel * level));
@@ -58,7 +48,7 @@ public abstract class Creature extends Entity {
     @Override
     public void setLevel(int level) {
         super.setLevel(level);
-        calculateAttributes();
+        updateAttributes();
     }
 
     /*

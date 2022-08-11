@@ -2,6 +2,7 @@ package org.example.model.hero;
 
 import lombok.Builder;
 import lombok.Data;
+import lombok.ToString;
 import org.example.controller.GameController;
 import org.example.model.GameModel;
 import org.example.model.creature.Creature;
@@ -10,7 +11,7 @@ import org.example.model.hero.dto.HeroDTO;
 import java.beans.PropertyChangeSupport;
 
 @Data
-@Builder
+@ToString(callSuper = true)
 public abstract class Hero extends Creature {
     protected String type;
     protected int currExp;
@@ -25,6 +26,7 @@ public abstract class Hero extends Creature {
         this.name = name;
         nextLevelExp = countLevelExp(level + 1);
         propertyChangeSupport = new PropertyChangeSupport(this);
+        updateAttributes();
     }
 
 
@@ -57,11 +59,6 @@ public abstract class Hero extends Creature {
 
     void gainExp(int exp) {
 
-    }
-
-    @Override
-    public String toString() {
-        return super.toString();
     }
 
 

@@ -7,6 +7,7 @@ public class Monster extends Creature {
     {
         super(4, 4, 40);
         setStats();
+        updateAttributes();
     }
 
     protected void setStats() {
