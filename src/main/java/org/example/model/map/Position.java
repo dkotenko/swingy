@@ -17,4 +17,9 @@ public class Position {
         int x = p.x;
         int y = p.y;
     };
+
+    public void increaseX() { x++; }
+    public void decreaseX() { x--; }
+    public void increaseY() { y++; }
+    public void decreaseY() { y--; }
 }

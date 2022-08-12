@@ -5,10 +5,8 @@ import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
 import org.example.controller.GameController;
 import org.example.controller.VisibleMap;
-import org.example.controller.VisibleMapCell;
 import org.example.model.GameState;
 import org.example.model.hero.dto.HeroDTO;
-import org.example.view.GuiView;
 import org.example.view.Messages;
 import org.example.view.SwingyView;
 import org.example.view.ViewTypes;
@@ -32,22 +30,10 @@ public class ConsoleView implements SwingyView {
     private boolean active;
     private String viewType;
     private VisibleMap map;
-    private ArrayList<String> legend;
 
     public ConsoleView() {
         viewType = ViewTypes.CONSOLE;
         initActionsArray();
-        initLegend();
-    }
-
-    private void initLegend() {
-        ArrayList<String> legend = new ArrayList<>();
-        legend.add("Map legend:");
-        legend.add("  X hero");
-        legend.add("  h heavy bandit");
-        legend.add("  m mushroom");
-        legend.add("  s skeleton");
-        legend.add("  * void (map border)");
     }
 
     private void initActionsArray() {
@@ -186,31 +172,12 @@ public class ConsoleView implements SwingyView {
         }
     }
 
-    private void getMapFromController() {
-        map = gameController.provideVisibleMap();
-    }
-
     private void printMap() {
-        getMapFromController();
-        VisibleMapCell startCell = map.getCells()[0][0];
-        int startY = startCell.getPosition().getY();
-        int startX = startCell.getPosition().getX();
-        int endY = startY + map.getVisibleSize();
-        int endX = startX + map.getVisibleSize();
-        int counter = 0;
-        //print header
-        System.out.print(String.format("%4s", " "));
-        for (int i = startX; i <= endX; i++) {
-            System.out.print(String.format("%4d", i));
-        }
-        System.out.println();
-
-        //print
-
+        new ConsoleMap(gameController.provideVisibleMap()).print();
     }
 
     public void showGameMain() {
-        System.out.println(gameController.getMapAsString());
+        System.out.println(new ConsoleMap(gameController.provideVisibleMap()));
 
     }
 

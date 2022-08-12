@@ -62,12 +62,13 @@ public class Battle {
         }
         hero.restoreHp();
         monster.restoreHp();
+        hero.gainExp(monster.getExp());
     }
 
     public ArrayList<Item> getRewards(Monster monster)
     {
         ArrayList<Item> rewards = new ArrayList<>();
-        double rewardChance = 1 / (monster.getLevel() * 3);
+        double rewardChance = 1 / (monster.getLevel());
 
         if (RandomGenerator.getRandom().nextDouble() < rewardChance) {
             rewards.add(new Helm(monster.getLevel()));

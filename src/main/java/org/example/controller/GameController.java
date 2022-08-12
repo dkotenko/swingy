@@ -5,6 +5,8 @@ import org.example.model.GameModel;
 import org.example.model.GameState;
 import org.example.model.hero.HeroFactory;
 import org.example.model.hero.dto.HeroDTO;
+import org.example.model.map.Directions;
+import org.example.model.map.Position;
 import org.example.view.SwingyView;
 import org.example.view.ViewTypes;
 import org.springframework.boot.ApplicationArguments;
@@ -109,6 +111,27 @@ public class GameController {
 
     public VisibleMap provideVisibleMap() {
         return gameModel.getGameMap().createVisibleMap();
+    }
+
+    public void moveNorth() { gameModel.moveHero(Directions.NORTH); }
+    public void moveSouth() { gameModel.moveHero(Directions.SOUTH); }
+    public void moveEast() { gameModel.moveHero(Directions.EAST); }
+    public void moveWest() { gameModel.moveHero(Directions.WEST); }
+
+    public void moveHero(Directions direction) {
+        Position prevPosition = gameModel.getCurrentHero().getPosition();
+        if (direction == Directions.NORTH) {
+            gameModel.moveHero(Directions.NORTH);
+        } else if (direction == Directions.SOUTH) {
+            gameModel.moveHero(Directions.SOUTH);
+        } else if (direction == Directions.EAST) {
+            gameModel.moveHero(Directions.EAST);
+        } else if (direction == Directions.WEST) {
+            gameModel.moveHero(Directions.WEST);
+        }
+        if (prevPosition.equals(getGameModel().getCurrentHero().getPosition())) {
+            updateGameState(GameState.EXIT_MAP_QUESTION);
+        }
     }
 
 }

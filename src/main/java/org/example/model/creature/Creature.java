@@ -11,8 +11,6 @@ import org.example.service.RandomGenerator;
 @ToString(callSuper = true)
 public abstract class Creature extends Entity {
 
-
-
     protected int basicAttack;
     protected int basicDefence;
     protected int basicHp;

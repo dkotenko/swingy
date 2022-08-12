@@ -9,9 +9,9 @@ public class VisibleMap {
 
     public VisibleMap(int size) {
         visibleSize = size;
-        cells = new VisibleMapCell[size][size];
-        for (int i = 0; i < size; i++) {
-            for (int j = 0; j < size; j++) {
+        cells = new VisibleMapCell[size + 1][size + 1];
+        for (int i = 1; i <= size; i++) {
+            for (int j = 1; j <= size; j++) {
                 cells[i][j] = new VisibleMapCell();
             }
         }

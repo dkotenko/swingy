@@ -10,6 +10,7 @@ public interface SwingyView {
     public void activate();
     public void deactivate();
     public String getViewType();
+    public void showExitMapQuestion();
     //public void showHeroStats();
     //public void showMap();
     //public void createHero();

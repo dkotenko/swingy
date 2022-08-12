@@ -4,7 +4,9 @@ import lombok.Data;
 import org.example.model.hero.dto.HeroDTO;
 import org.example.model.hero.Hero;
 import org.example.model.hero.HeroFactory;
+import org.example.model.map.Directions;
 import org.example.model.map.GameMap;
+import org.example.model.map.Position;
 import org.example.service.ValidationService;
 import org.example.service.repository.HeroRepository;
 import org.springframework.stereotype.Component;
@@ -55,6 +57,44 @@ public class GameModel {
 
     public void startGame() {
         gameMap = new GameMap(currentHero);
+    }
+
+    public void moveHero(Directions direction) {
+        boolean isExit = false;
+        Position newPosition = new Position(currentHero.getPosition());
+
+        if (direction == Directions.EAST) {
+            if (currentHero.getPosition().getX() == gameMap.getSize()) {
+                isExit = true;
+            } else {
+                newPosition.increaseX();
+            }
+        } else if (direction == Directions.WEST) {
+            if (currentHero.getPosition().getX() == 1) {
+                isExit = true;
+            } else {
+                newPosition.decreaseX();
+            }
+        } else if (direction == Directions.NORTH) {
+            if (currentHero.getPosition().getY() == gameMap.getSize()) {
+                isExit = true;
+            } else {
+                newPosition.increaseY();
+            }
+        } else if (direction == Directions.SOUTH) {
+            if (currentHero.getPosition().getY() == 1) {
+                isExit = true;
+            } else {
+                newPosition.decreaseY();
+            }
+        } else {
+            System.err.println("Invalid direction while moving");
+        }
+
+        if (isExit) {
+            return;
+        }
+        gameMap.moveTo(newPosition);
     }
 
 }
