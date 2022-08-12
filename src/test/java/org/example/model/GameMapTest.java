@@ -22,7 +22,7 @@ public class GameMapTest {
             long monsterNum = Arrays.stream(gameMap.getCells()).flatMap(Arrays::stream)
                     .collect(Collectors.toList())
                     .stream()
-                    .filter(x -> !x.isEmpty())
+                    .filter(x -> x.containsMonster())
                     .count();
             System.out.println(String.format("Number of monsters for level %d = %d", hero.getLevel(), (int)monsterNum));
             Assertions.assertTrue(monsterNum >= 0);

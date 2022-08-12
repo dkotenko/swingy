@@ -20,6 +20,11 @@ import java.io.IOException;
 @Getter
 @Setter
 public class GuiView extends JFrame implements SwingyView {
+
+    private interface ShowAction {
+        void show();
+    }
+
     private GameController gameController;
     private final AppConfig appConfig;
     GameState gameState;
@@ -27,12 +32,6 @@ public class GuiView extends JFrame implements SwingyView {
     private boolean active;
     private String viewType;
     private JFrame f;
-
-
-
-    interface ShowAction {
-        void show();
-    }
 
     public GuiView(AppConfig appConfig) {
         this.appConfig = appConfig;
@@ -43,9 +42,9 @@ public class GuiView extends JFrame implements SwingyView {
 
     private void initActionsArray() {
         showActions = new ShowAction[GameState.GAME_STATE_NUM.ordinal()];
-        showActions[GameState.START_MENU.ordinal()] = () -> showStartMenu();
-        showActions[GameState.CREATE_HERO.ordinal()] = () -> showNewHero();
-        showActions[GameState.CHOOSE_HERO.ordinal()] = () -> showChooseHero();
+        showActions[GameState.START_MENU.ordinal()] = this::showStartMenu;
+        showActions[GameState.CREATE_HERO.ordinal()] = this::showNewHero;
+        showActions[GameState.CHOOSE_HERO.ordinal()] = this::showChooseHero;
     }
 
     private void setUpFrame() {

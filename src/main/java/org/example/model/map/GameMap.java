@@ -58,7 +58,7 @@ public class GameMap {
             while (attempts-- > 0) {
                 int x = RandomGenerator.getRandom().nextInt(size);
                 int y = RandomGenerator.getRandom().nextInt(size);
-                if (!cells[y][x].containsMonster()) {
+                if (!cells[y][x].containsMonster() && !isCenter(x, y)) {
                     cells[y][x].setMonster(monster);
                     monster.setPosition(new Position(y, x));
                     isSet = true;
@@ -72,11 +72,11 @@ public class GameMap {
         }
     }
 
-    private boolean isCenter(Position position) {
-        return position.getX() == size / 2 && position.getY() == size / 2;
+    private boolean isCenter(int x, int y) {
+        return x == size / 2 && y == size / 2;
     }
 
-    public VisibleMap getVisibleMap() {
+    public VisibleMap createVisibleMap() {
         VisibleMap visibleMap = new VisibleMap(visibleSize);
         int minY = hero.getPosition().getY() - visibleSize / 2;
         int maxY = hero.getPosition().getY() + visibleSize / 2;

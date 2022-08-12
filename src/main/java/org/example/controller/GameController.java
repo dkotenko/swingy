@@ -107,4 +107,8 @@ public class GameController {
         updateGameState(GameState.GAME_MAIN);
     }
 
+    public VisibleMap provideVisibleMap() {
+        return gameModel.getGameMap().createVisibleMap();
+    }
+
 }

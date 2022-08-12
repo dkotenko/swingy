@@ -1,11 +1,17 @@
-package org.example.view;
+package org.example.view.console;
 
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
 import org.example.controller.GameController;
+import org.example.controller.VisibleMap;
+import org.example.controller.VisibleMapCell;
 import org.example.model.GameState;
 import org.example.model.hero.dto.HeroDTO;
+import org.example.view.GuiView;
+import org.example.view.Messages;
+import org.example.view.SwingyView;
+import org.example.view.ViewTypes;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -15,26 +21,39 @@ import java.util.Scanner;
 @Getter
 @Setter
 public class ConsoleView implements SwingyView {
+
+    private interface ShowAction {
+        void show();
+    }
+
     GameController gameController;
-    private GuiView.ShowAction[] showActions;
+    private ShowAction[] showActions;
     private GameState gameState;
     private boolean active;
     private String viewType;
-
-
-    interface ShowAction {
-        void show();
-    }
+    private VisibleMap map;
+    private ArrayList<String> legend;
 
     public ConsoleView() {
         viewType = ViewTypes.CONSOLE;
         initActionsArray();
+        initLegend();
+    }
+
+    private void initLegend() {
+        ArrayList<String> legend = new ArrayList<>();
+        legend.add("Map legend:");
+        legend.add("  X hero");
+        legend.add("  h heavy bandit");
+        legend.add("  m mushroom");
+        legend.add("  s skeleton");
+        legend.add("  * void (map border)");
     }
 
     private void initActionsArray() {
-        showActions = new GuiView.ShowAction[GameState.GAME_STATE_NUM.ordinal()];
-        showActions[GameState.START_MENU.ordinal()] = () -> showStartMenu();
-        showActions[GameState.GAME_MAIN.ordinal()] = () -> showGameMain();
+        showActions = new ShowAction[GameState.GAME_STATE_NUM.ordinal()];
+        showActions[GameState.START_MENU.ordinal()] = this::showStartMenu;
+        showActions[GameState.GAME_MAIN.ordinal()] = this::showGameMain;
         //showActions[GameState.CREATE_HERO.ordinal()] = () -> showNewHero();
         //showActions[GameState.CHOOSE_HERO.ordinal()] = () -> showChooseHero();
     }
@@ -167,8 +186,32 @@ public class ConsoleView implements SwingyView {
         }
     }
 
+    private void getMapFromController() {
+        map = gameController.provideVisibleMap();
+    }
+
+    private void printMap() {
+        getMapFromController();
+        VisibleMapCell startCell = map.getCells()[0][0];
+        int startY = startCell.getPosition().getY();
+        int startX = startCell.getPosition().getX();
+        int endY = startY + map.getVisibleSize();
+        int endX = startX + map.getVisibleSize();
+        int counter = 0;
+        //print header
+        System.out.print(String.format("%4s", " "));
+        for (int i = startX; i <= endX; i++) {
+            System.out.print(String.format("%4d", i));
+        }
+        System.out.println();
+
+        //print
+
+    }
+
     public void showGameMain() {
         System.out.println(gameController.getMapAsString());
+
     }
 
     public void showStatus() {
