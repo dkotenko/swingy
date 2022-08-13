@@ -177,7 +177,7 @@ public class ConsoleView implements SwingyView {
     }
 
     public void showGameMain() {
-        System.out.println(new ConsoleMap(gameController.provideVisibleMap()));
+        new ConsoleMap(gameController.provideVisibleMap()).print();
 
     }
 
@@ -191,5 +191,25 @@ public class ConsoleView implements SwingyView {
 
     public void deactivate() {
         active = false;
+    }
+
+    public void showExitMapQuestion() {
+        int choice = 0;
+        while (choice != 1 && choice != 2) {
+            System.out.println(Messages.EXIT_MAP_QUESTION);
+            System.out.println("1. Leave");
+            System.out.println("2. Stay");
+
+            choice = readInt();
+            if (choice != 1 && choice != 2) {
+                System.err.println("Invalid input, please try again");
+            }
+        }
+        if (choice == 1) {
+            return;
+        } else {
+            return;
+        }
+
     }
 }

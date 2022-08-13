@@ -96,6 +96,7 @@ public class GuiView extends JFrame implements SwingyView {
 
     }
 
+    public void showExitMapQuestion() {}
 
     public void showStartMenu() {
 

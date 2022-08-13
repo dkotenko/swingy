@@ -24,4 +24,6 @@ public class Messages {
     public static final String CHOOSE_HERO_MESSAGE = "Choose a hero";
     public static final String CHOOSE_HERO_NO_HEROES = "Heroes haven`t been created yet, return and create one";
 
+    public static final String EXIT_MAP_QUESTION = "Are you want to leave the map?";
+
 }
