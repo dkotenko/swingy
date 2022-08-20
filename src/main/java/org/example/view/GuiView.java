@@ -19,7 +19,7 @@ import java.io.IOException;
 @Service
 @Getter
 @Setter
-public class GuiView extends JFrame implements SwingyView {
+public class GuiView extends JFrame { //} implements SwingyView {
 
     private interface ShowAction {
         void show();

@@ -26,4 +26,13 @@ public class Messages {
 
     public static final String EXIT_MAP_QUESTION = "Are you want to leave the map?";
 
+    public static final String GO_NORTH = "Go north";
+    public static final String GO_SOUTH = "Go south";
+    public static final String GO_EAST = "Go east";
+    public static final String GO_WEST = "Go west";
+
+    public static final String RETURN_PREV = "return to previous menu";
+    public static final String LABEL_START_NENU = "*** START MENU ***";
+
+
 }

@@ -21,7 +21,7 @@ public class ConsoleMapLegend {
         dict.put("Void", "#");
 
         legend = new ArrayList<>();
-        legend.add("Map legend:");
+
         dict.entrySet().forEach(x -> legend.add(
                 String.format("%s\t%s", x.getValue(), x.getKey() )));
 

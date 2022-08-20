@@ -40,8 +40,39 @@ public class ConsoleView implements SwingyView {
         showActions = new ShowAction[GameState.GAME_STATE_NUM.ordinal()];
         showActions[GameState.START_MENU.ordinal()] = this::showStartMenu;
         showActions[GameState.GAME_MAIN.ordinal()] = this::showGameMain;
+        showActions[GameState.BEFORE_BATTLE.ordinal()] = this::showBeforeBattle;
+        //showActions[GameState.START_BATTLE.ordinal()] =
         //showActions[GameState.CREATE_HERO.ordinal()] = () -> showNewHero();
         //showActions[GameState.CHOOSE_HERO.ordinal()] = () -> showChooseHero();
+    }
+
+    public void showBeforeBattle() {
+        System.out.println(String.format(
+                "You`ve met a monster - %s (chance to win - %.2f%%)",
+                gameController.getCurrentMonsterName(),
+                gameController.getLastBattleProbability()
+                ));
+
+
+        while (true) {
+            System.out.println("You could fight him or retreat with 50% chance. What will you choose?");
+            System.out.println("1. Attack the monster!");
+            System.out.println("2. Retreat (chance - 50%");
+
+            int choice = readInt();
+            if (choice == 1) {
+                gameController.startBattle();
+                ;//start battle
+                break;
+            } else if (choice == 2) {
+                gameController.doRetreat();
+                ; // doRetreat;
+                break;
+            } else {
+                System.out.println("Invalid action, please try again");
+            }
+        }
+
     }
 
     public String readLine() {
@@ -131,7 +162,7 @@ public class ConsoleView implements SwingyView {
                 System.out.println(String.format("%d) %s", i + 1, heroes.get(i).toString()));
                 i++;
             }
-            System.out.println(String.format("\n%d. return to previous menu", i + 1));
+            System.out.println(String.format("\n%d. %s", i + 1, Messages.RETURN_PREV));
             choice = readInt();
             if (choice < 1 || choice > heroes.size()) {
                 if (choice == heroes.size() + 1) {
@@ -173,11 +204,40 @@ public class ConsoleView implements SwingyView {
     }
 
     private void printMap() {
-        new ConsoleMap(gameController.provideVisibleMap()).print();
+        new ConsoleMap(gameController.provideVisibleMap(),
+                gameController.provideHeroInfo()).print();
     }
 
     public void showGameMain() {
-        new ConsoleMap(gameController.provideVisibleMap()).print();
+        while (true) {
+            new ConsoleMap(gameController.provideVisibleMap(),
+                    gameController.provideHeroInfo()).print();
+            gameController.checkBattle();
+
+            System.out.println("\nAvailable actions:");
+            System.out.println("1. " + Messages.GO_NORTH);
+            System.out.println("2. " + Messages.GO_EAST);
+            System.out.println("3. " + Messages.GO_SOUTH);
+            System.out.println("4. " + Messages.GO_WEST);
+            System.out.println("\n5. " + Messages.RETURN_PREV
+            );
+
+            int n = readInt();
+            if (n == 1) {
+                gameController.moveNorth();
+            } else if (n == 2) {
+                gameController.moveEast();
+            } else if (n == 3) {
+                gameController.moveSouth();
+            } else if (n == 4) {
+                gameController.moveWest();
+            } else if (n == 5) {
+                return;
+            } else {
+                System.out.println("Invalid action, please try again");
+            }
+        }
+
 
     }
 

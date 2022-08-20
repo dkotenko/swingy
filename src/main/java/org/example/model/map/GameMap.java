@@ -17,6 +17,7 @@ public class GameMap {
     private ArrayList<Monster> monsters;
     private Hero hero;
     private final static int visibleSize = 9;
+    private int center;
 
     public GameMap(Hero hero)
     {
@@ -24,7 +25,8 @@ public class GameMap {
         this.hero = hero;
         size = countSize(level);
         cells = new GameMapCell[size + 1][size + 1];
-        hero.setPosition(new Position(size / 2, size / 2));
+        center = size % 2 == 0 ? size / 2 : size / 2 + 1;
+        hero.setPosition(new Position(center, center));
         initCells();
         populate();
     }
@@ -36,7 +38,7 @@ public class GameMap {
                 cells[i][j].setPosition(new Position(i, j));
             }
         }
-        cells[size / 2][size / 2].setHero(hero);
+        cells[center][center].setHero(hero);
     }
 
     public static int countSize(int level) {
@@ -72,7 +74,7 @@ public class GameMap {
     }
 
     private boolean isCenter(int x, int y) {
-        return x == size / 2 && y == size / 2;
+        return x == center && y == center;
     }
 
     public VisibleMap createVisibleMap() {
@@ -83,8 +85,8 @@ public class GameMap {
 
         for (int i = 1; i <= visibleSize; i++) {
             for (int j = 1; j <= visibleSize; j++) {
-                int currY = i + minY;
-                int currX = j + minX;
+                int currY = i + minY - 1;
+                int currX = j + minX - 1;
                 visibleMap.getCells()[i][j].setPosition(new Position(currX, currY));
                 if (currY < 1 || currY > size || currX < 1 || currX > size) {
                     continue;
@@ -107,5 +109,10 @@ public class GameMap {
         Position currPosition = hero.getPosition();
         cells[currPosition.getY()][currPosition.getX()].setHero(null);
         cells[newPosition.getY()][newPosition.getX()].setHero(hero);
+        hero.setPosition(newPosition);
+    }
+
+    public GameMapCell getCellByPosition(Position p) {
+        return cells[p.getY()][p.getX()];
     }
 }

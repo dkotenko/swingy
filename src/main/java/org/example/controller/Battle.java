@@ -14,7 +14,7 @@ import java.util.ArrayList;
 public class Battle {
     static int simTimes = 100;
 
-    public double getHeroChanceToWin(Hero hero, Monster monster) {
+    public static double getHeroChanceToWin(Hero hero, Monster monster) {
         int winTimes = 0;
 
         for (int i = 0; i < simTimes; i++) {
@@ -31,7 +31,7 @@ public class Battle {
     /*
      * Monster strikes first
      */
-    public void doFight(Hero hero, Monster monster, boolean isNotSimulation) {
+    public static void doFight(Hero hero, Monster monster, boolean isNotSimulation) {
         Creature attacker = hero;
         Creature defender = monster;
         Creature temp = null;
@@ -50,7 +50,7 @@ public class Battle {
         }
     }
 
-    public void doBattle(Hero hero, Monster monster)
+    public static void doBattle(Hero hero, Monster monster)
     {
         doFight(hero, monster, true);
 
@@ -65,7 +65,7 @@ public class Battle {
         hero.gainExp(monster.getExp());
     }
 
-    public ArrayList<Item> getRewards(Monster monster)
+    public static ArrayList<Item> getRewards(Monster monster)
     {
         ArrayList<Item> rewards = new ArrayList<>();
         double rewardChance = 1 / (monster.getLevel());

@@ -13,9 +13,10 @@ public class Position {
     };
 
     public Position(){};
+
     public Position(Position p){
-        int x = p.x;
-        int y = p.y;
+        x = p.x;
+        y = p.y;
     };
 
     public void increaseX() { x++; }

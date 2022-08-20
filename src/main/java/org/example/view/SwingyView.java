@@ -11,6 +11,8 @@ public interface SwingyView {
     public void deactivate();
     public String getViewType();
     public void showExitMapQuestion();
+    public void showBeforeBattle();
+
     //public void showHeroStats();
     //public void showMap();
     //public void createHero();

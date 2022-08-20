@@ -57,8 +57,7 @@ public abstract class Hero extends Creature {
 
     public void gainExp(int exp) {
         currExp += exp;
-        if (currExp >= nextLevelExp) {
-            currExp -= nextLevelExp;
+        while (currExp >= nextLevelExp) {
             level++;
             nextLevelExp = countLevelExp(level + 1);
             System.out.println(String.format(

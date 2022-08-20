@@ -6,7 +6,9 @@ import org.example.model.GameState;
 import org.example.model.hero.HeroFactory;
 import org.example.model.hero.dto.HeroDTO;
 import org.example.model.map.Directions;
+import org.example.model.map.GameMapCell;
 import org.example.model.map.Position;
+import org.example.service.RandomGenerator;
 import org.example.view.SwingyView;
 import org.example.view.ViewTypes;
 import org.springframework.boot.ApplicationArguments;
@@ -16,15 +18,19 @@ import org.springframework.stereotype.Component;
 
 import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Random;
 
 @Component
 @Data
 public class GameController {
-    ArrayList<SwingyView> views;
-    SwingyView currView;
-    GameModel gameModel;
-    ApplicationArguments args;
+    private ArrayList<SwingyView> views;
+    private SwingyView currView;
+    private GameModel gameModel;
+    private ApplicationArguments args;
+    private double lastBattleProbability;
+
 
     public GameController(List<SwingyView> views, GameModel gameModel, ApplicationArguments args) {
         this.views = (ArrayList<SwingyView>)views;
@@ -110,6 +116,7 @@ public class GameController {
     }
 
     public VisibleMap provideVisibleMap() {
+
         return gameModel.getGameMap().createVisibleMap();
     }
 
@@ -118,20 +125,35 @@ public class GameController {
     public void moveEast() { gameModel.moveHero(Directions.EAST); }
     public void moveWest() { gameModel.moveHero(Directions.WEST); }
 
-    public void moveHero(Directions direction) {
-        Position prevPosition = gameModel.getCurrentHero().getPosition();
-        if (direction == Directions.NORTH) {
-            gameModel.moveHero(Directions.NORTH);
-        } else if (direction == Directions.SOUTH) {
-            gameModel.moveHero(Directions.SOUTH);
-        } else if (direction == Directions.EAST) {
-            gameModel.moveHero(Directions.EAST);
-        } else if (direction == Directions.WEST) {
-            gameModel.moveHero(Directions.WEST);
-        }
-        if (prevPosition.equals(getGameModel().getCurrentHero().getPosition())) {
-            updateGameState(GameState.EXIT_MAP_QUESTION);
+
+    public void checkBattle() {
+        Position heroPosition = gameModel.getCurrentHero().getPosition();
+        GameMapCell activeCell =  gameModel.getGameMap().getCellByPosition(heroPosition);
+
+        if (activeCell.containsMonster() && activeCell.containsHero()) {
+            lastBattleProbability = Battle.getHeroChanceToWin(
+                    activeCell.getHero(), activeCell.getMonster());
+            updateGameState(GameState.BEFORE_BATTLE);
         }
     }
 
+    public String getCurrentMonsterName() {
+       return gameModel.getCurrentMonster().getName();
+    }
+
+    public ArrayList<String> provideHeroInfo() {
+        return new HeroDTO(gameModel.getCurrentHero()).toList();
+    }
+
+    public void startBattle() {
+        updateGameState(GameState.START_BATTLE);
+    }
+
+    public void doRetreat() {
+        updateGameState(GameState.RETREAT);
+    }
+
+    public double getRetreatProbability() {
+        return RandomGenerator.getRandom().nextDouble() * 100;
+    }
 }

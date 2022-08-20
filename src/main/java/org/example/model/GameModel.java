@@ -7,6 +7,7 @@ import org.example.model.hero.HeroFactory;
 import org.example.model.map.Directions;
 import org.example.model.map.GameMap;
 import org.example.model.map.Position;
+import org.example.model.monster.Monster;
 import org.example.service.ValidationService;
 import org.example.service.repository.HeroRepository;
 import org.springframework.stereotype.Component;
@@ -17,10 +18,11 @@ import java.util.ArrayList;
 @Component
 @Data
 public class GameModel {
-    GameMap gameMap;
-    Hero currentHero;
-    GameState currentState;
-    GameState previousState;
+    private GameMap gameMap;
+    private Hero currentHero;
+    private Monster currentMonster;
+    private GameState currentState;
+    private GameState previousState;
     private final ValidationService validationService;
     private final HeroRepository heroRepository;
 
@@ -76,16 +78,16 @@ public class GameModel {
                 newPosition.decreaseX();
             }
         } else if (direction == Directions.NORTH) {
-            if (currentHero.getPosition().getY() == gameMap.getSize()) {
-                isExit = true;
-            } else {
-                newPosition.increaseY();
-            }
-        } else if (direction == Directions.SOUTH) {
             if (currentHero.getPosition().getY() == 1) {
                 isExit = true;
             } else {
                 newPosition.decreaseY();
+            }
+        } else if (direction == Directions.SOUTH) {
+            if (currentHero.getPosition().getY() == gameMap.getSize()) {
+                isExit = true;
+            } else {
+                newPosition.increaseY();
             }
         } else {
             System.err.println("Invalid direction while moving");
@@ -93,6 +95,11 @@ public class GameModel {
 
         if (isExit) {
             return;
+        }
+        if (gameMap.getCellByPosition(newPosition).containsMonster()) {
+            currentMonster = gameMap.getCellByPosition(newPosition).getMonster();
+        } else {
+            currentMonster = null;
         }
         gameMap.moveTo(newPosition);
     }
