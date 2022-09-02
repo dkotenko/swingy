@@ -16,7 +16,7 @@ public class GameMapCell {
     }
     public boolean containsHero() { return hero != null; }
 
-    public void clean() {
+    public void deleteMonster() {
         monster = null;
     }
 

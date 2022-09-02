@@ -4,7 +4,6 @@ import org.example.controller.VisibleMap;
 import org.example.controller.VisibleMapCell;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 
 public class ConsoleMap {
     private VisibleMap visibleMap;
@@ -35,6 +34,12 @@ public class ConsoleMap {
         int endX = startX + visibleMap.getVisibleSize();
         int legendRowsCounter = 0;
         int heroInfoRowsCounter = 0;
+
+        //Print map info
+        System.out.println(String.format(
+                "\nMission info: level - %d, map size - %dx%d",
+                visibleMap.getLevel(), visibleMap.getTrueSize(), visibleMap.getTrueSize()
+                ));
 
         //construct header
         System.out.print(String.format("%4s", " "));

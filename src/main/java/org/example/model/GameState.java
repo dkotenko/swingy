@@ -9,5 +9,5 @@ public enum GameState {
     BEFORE_BATTLE,
     START_BATTLE,
     RETREAT,
-    GAME_STATE_NUM,
+    GAME_STATE_NUM
 }

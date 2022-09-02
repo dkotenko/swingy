@@ -23,8 +23,21 @@ public abstract class Hero extends Creature {
     public Hero(String name){
         super(1, 1, 10);
         this.name = name;
-        nextLevelExp = countLevelExp(level + 1);
+        nextLevelExp = countLevelExp(level);
         propertyChangeSupport = new PropertyChangeSupport(this);
+        updateAttributes();
+    }
+
+    public Hero(HeroDTO heroDTO) {
+        super(1, 1, 10);
+        setLevel(heroDTO.getLevel());
+        id = heroDTO.getId();
+        name = heroDTO.getName();
+        type = heroDTO.getType();
+        currExp =  heroDTO.getExp();
+        helm = heroDTO.getHelm();
+        armor = heroDTO.getArmor();
+        weapon = heroDTO.getWeapon();
         updateAttributes();
     }
 
@@ -34,15 +47,7 @@ public abstract class Hero extends Creature {
         return (level * 1000 + (level - 1) * (level - 1) * 450);
     }
 
-    public Hero(HeroDTO heroDTO) {
-        super();
-        setLevel(heroDTO.getLevel());
-        currExp =  heroDTO.getExp();
-        helm = heroDTO.getHelm();
-        armor = heroDTO.getArmor();
-        weapon = heroDTO.getWeapon();
 
-    }
 
     public Hero(String name, String type) {
         this.name = name;
@@ -59,7 +64,8 @@ public abstract class Hero extends Creature {
         currExp += exp;
         while (currExp >= nextLevelExp) {
             level++;
-            nextLevelExp = countLevelExp(level + 1);
+            currExp -= nextLevelExp;
+            nextLevelExp = countLevelExp(level);
             System.out.println(String.format(
                     "Congratulations! Hero %s reached level %d", name, level
             ));

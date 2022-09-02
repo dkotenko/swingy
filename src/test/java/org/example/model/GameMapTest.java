@@ -3,30 +3,23 @@ package org.example.model;
 import org.example.model.hero.Hero;
 import org.example.model.hero.HeroFactory;
 import org.example.model.hero.HeroTypes;
+import org.example.model.map.Directions;
 import org.example.model.map.GameMap;
+import org.example.model.map.GameMapCell;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-
-import java.util.Arrays;
-import java.util.stream.Collectors;
 
 public class GameMapTest {
 
     @Test
-    public void monster_number_per_map_check() {
+    public void move_check() {
         Hero hero = new HeroFactory().create(HeroTypes.WARRIOR);
-
-        for (int level = 1; level < 11; level++) {
-            hero.setLevel(level);
-            GameMap gameMap = new GameMap(hero);
-            long monsterNum = Arrays.stream(gameMap.getCells()).flatMap(Arrays::stream)
-                    .collect(Collectors.toList())
-                    .stream()
-                    .filter(x -> x.containsMonster())
-                    .count();
-            System.out.println(String.format("Number of monsters for level %d = %d", hero.getLevel(), (int)monsterNum));
-            Assertions.assertTrue(monsterNum >= 0);
-        }
+        GameModel gameModel = new GameModel(null, null);
+        gameModel.setCurrentHero(hero);
+        gameModel.setGameMap(new GameMap(hero));
+        gameModel.moveHero(Directions.EAST);
+        GameMapCell cell = gameModel.getGameMap().getCellByPosition(gameModel.getCurrentHero().getPosition());
+        Assertions.assertEquals(cell.getPosition().getX(), gameModel.getCurrentHero().getPosition().getX());
     }
 
     @Test

@@ -19,6 +19,11 @@ public class ConsoleMapLegend {
         dict.put("Skeleton", "s");
         dict.put("Ground", ".");
         dict.put("Void", "#");
+        /*
+        dict.put("Warrior", "@");
+        dict.put("Rogue", "@");
+        dict.put("Mage", "@");
+        */
 
         legend = new ArrayList<>();
 

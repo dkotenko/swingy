@@ -21,5 +21,5 @@ swingy:
     simulation:
       times: 100
   window:
-    width: 800
-    height: 600
+    width: 1366
+    height: 768

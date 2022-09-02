@@ -35,7 +35,7 @@ public class GameMap {
         for (int i = 1; i <= size; i++) {
             for (int j = 1; j <= size; j++) {
                 cells[i][j] = new GameMapCell();
-                cells[i][j].setPosition(new Position(i, j));
+                cells[i][j].setPosition(new Position(j, i));
             }
         }
         cells[center][center].setHero(hero);
@@ -56,13 +56,14 @@ public class GameMap {
                     RandomGenerator.getRandomMonsterType()
             );
             monster.setExp(expPerMonster);
+            monster.setLevel(RandomGenerator.getRandomFromRange(level, level + 2));
             int attempts = defaultAttempts;
             while (attempts-- > 0) {
                 int x = RandomGenerator.getRandom().nextInt(size) + 1; //map array[size+1][size+1]
                 int y = RandomGenerator.getRandom().nextInt(size) + 1;
                 if (!cells[y][x].containsMonster() && !isCenter(x, y)) {
                     cells[y][x].setMonster(monster);
-                    monster.setPosition(new Position(y, x));
+                    monster.setPosition(new Position(x, y));
                     isSet = true;
                     break ;
                 }
@@ -78,7 +79,7 @@ public class GameMap {
     }
 
     public VisibleMap createVisibleMap() {
-        VisibleMap visibleMap = new VisibleMap(visibleSize);
+        VisibleMap visibleMap = new VisibleMap(visibleSize, size, level);
 
         int minY = hero.getPosition().getY() - visibleSize / 2;
         int minX = hero.getPosition().getX() - visibleSize / 2;
@@ -96,7 +97,7 @@ public class GameMap {
                             cells[currY][currX].getMonster().getType()
                     );
                 } else if (cells[currY][currX].containsHero()) {
-                    visibleMap.getCells()[i][j].setType("Hero");
+                    visibleMap.getCells()[i][j].setType(hero.getType());
                 } else {
                     visibleMap.getCells()[i][j].setType("Ground");
                 }
@@ -110,6 +111,7 @@ public class GameMap {
         cells[currPosition.getY()][currPosition.getX()].setHero(null);
         cells[newPosition.getY()][newPosition.getX()].setHero(hero);
         hero.setPosition(newPosition);
+        hero.setPrevPosition(currPosition);
     }
 
     public GameMapCell getCellByPosition(Position p) {

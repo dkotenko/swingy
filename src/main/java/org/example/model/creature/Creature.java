@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.ToString;
 import org.example.model.entity.Entity;
 import org.example.model.item.Item;
+import org.example.model.item.ItemTypes;
 import org.example.model.map.Position;
 import org.example.service.RandomGenerator;
 
@@ -22,6 +23,7 @@ public abstract class Creature extends Entity {
     protected int armor;
     protected int helm;
     protected Position position;
+    protected Position prevPosition;
     protected int hpToRestore;
 
 
@@ -38,9 +40,9 @@ public abstract class Creature extends Entity {
 
     public void updateAttributes()
     {
-        attack = (int)(attackModifier * (basicAttack + attackBonusPerLevel * level));
-        defence = (int)(defenceModifier * (basicDefence + defenceBonusPerLevel * level));
-        hp = (int)(hpModifier * basicHp + (basicHp + hpBonusPerLevel * level));
+        attack = (int)(attackModifier * (basicAttack + attackBonusPerLevel * level + weapon));
+        defence = (int)(defenceModifier * (basicDefence + defenceBonusPerLevel * level + armor));
+        hp = (int)(hpModifier * (basicHp + hpBonusPerLevel * level + helm));
         hpToRestore = hp;
     }
 
@@ -73,18 +75,31 @@ public abstract class Creature extends Entity {
     }
     */
 
-    public void unequipItem(Item item) {
-        basicAttack -= item.getAttack();
-        basicDefence -= item.getDefence();
-        basicHp -= item.getHp();
-
-    }
-
     public void restoreHp() {
         hp = hpToRestore;
     }
 
+    public void equipItem(Item item) {
+        if (item.getType().equals(ItemTypes.ARMOR)) {
+            armor = item.getLevel();
+        } else if (item.getType().equals(ItemTypes.WEAPON)) {
+            weapon = item.getLevel();
+        } else if (item.getType().equals(ItemTypes.HELM)) {
+            helm = item.getLevel();
+        }
+        updateAttributes();
+    }
+
     /*
+    public void unequipItem(Item item) {
+        basicAttack -= item.getAttack();
+        basicDefence -= item.getDefence();
+        basicHp -= item.getHp();
+    }
+
+
+
+
     public void equipItem(Item item) {
         //Item oldItem = getItemByType(getType());
         if (oldItem != null) {
@@ -95,7 +110,8 @@ public abstract class Creature extends Entity {
         basicDefence += item.getBasicDefence();
         basicHp += item.getBasicHp();
     }
-    */
+
+     */
 
     public int attack(Creature creature) {
         int damage = (int)(attack * RandomGenerator.getRandomCoef()) - creature.getDefence();
@@ -112,5 +128,9 @@ public abstract class Creature extends Entity {
 
     public String statsToString() {
         return String.format("(attack=%d, defence=%d, hp=%d)", attack, defence, hp);
+    }
+
+    public boolean isDead() {
+        return hp <= 0;
     }
 }

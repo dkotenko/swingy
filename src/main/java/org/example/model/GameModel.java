@@ -1,11 +1,12 @@
 package org.example.model;
 
 import lombok.Data;
-import org.example.model.hero.dto.HeroDTO;
 import org.example.model.hero.Hero;
 import org.example.model.hero.HeroFactory;
+import org.example.model.hero.dto.HeroDTO;
 import org.example.model.map.Directions;
 import org.example.model.map.GameMap;
+import org.example.model.map.GameMapCell;
 import org.example.model.map.Position;
 import org.example.model.monster.Monster;
 import org.example.service.ValidationService;
@@ -33,6 +34,33 @@ public class GameModel {
         previousState = GameState.START_MENU;
     }
 
+    public void deleteHeroFromDb(HeroDTO heroDTO) {
+        heroRepository.delete(heroDTO);
+    }
+
+    public void retreatToSafeCell() {
+        int heroX = currentHero.getPosition().getX();
+        int heroY = currentHero.getPosition().getY();
+        for (int i = 1; i < gameMap.getSize(); i++) {
+            for (int y = heroY - i; y < heroY + i; y++) {
+                for (int x = heroX - i; x < heroX + i; x++) {
+                    if (
+                            y <= gameMap.getSize()
+                            && y >= 1
+                            && x <= gameMap.getSize()
+                            && x >= 1
+                            && x != heroX
+                            && y != heroY
+                            && !gameMap.getCells()[y][x].containsMonster()
+                    ) {
+                        gameMap.moveTo(new Position(x, y));
+                        return;
+                    }
+                }
+            }
+        }
+    }
+
     public ArrayList<HeroDTO> getHeroes() {
         return (ArrayList<HeroDTO>)heroRepository.findAll();
     }
@@ -46,6 +74,10 @@ public class GameModel {
         return  heroRepository.findByName(name).isPresent();
     }
 
+    public void updateHero() {
+        heroRepository.saveAndFlush(new HeroDTO(currentHero));
+    }
+
     public void createHero(String name, String type) {
         Hero hero = new HeroFactory().create(name, type);
         try {
@@ -57,11 +89,14 @@ public class GameModel {
         }
     }
 
-    public void startGame() {
+    public void loadMap() {
         gameMap = new GameMap(currentHero);
     }
 
-    public void moveHero(Directions direction) {
+    public static final String MOVE_EXIT = "exit";
+    public static final String MOVE_NOT_EXIT = "non exit";
+
+    public String moveHero(Directions direction) {
         boolean isExit = false;
         Position newPosition = new Position(currentHero.getPosition());
 
@@ -94,7 +129,7 @@ public class GameModel {
         }
 
         if (isExit) {
-            return;
+            return MOVE_EXIT;
         }
         if (gameMap.getCellByPosition(newPosition).containsMonster()) {
             currentMonster = gameMap.getCellByPosition(newPosition).getMonster();
@@ -102,6 +137,20 @@ public class GameModel {
             currentMonster = null;
         }
         gameMap.moveTo(newPosition);
+        return MOVE_NOT_EXIT;
+    }
+
+    public void doRetreat() {
+        Position position = currentHero.getPosition();
+        gameMap.moveTo(currentHero.getPrevPosition());
+        currentHero.setPrevPosition(position);
+    }
+
+    public void deleteCurrentMonster() {
+        GameMapCell currCell = gameMap.getCellByPosition(currentHero.getPosition());
+        currentMonster = null;
+        currCell.deleteMonster();
+
     }
 
 }

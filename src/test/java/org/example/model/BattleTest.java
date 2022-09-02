@@ -1,6 +1,6 @@
 package org.example.model;
 
-import org.example.controller.Battle;
+import org.example.service.battle.Battle;
 import org.example.model.hero.Warrior;
 import org.example.model.monster.Skeleton;
 import org.junit.jupiter.api.Assertions;

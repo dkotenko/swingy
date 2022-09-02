@@ -12,7 +12,9 @@ public interface SwingyView {
     public String getViewType();
     public void showExitMapQuestion();
     public void showBeforeBattle();
-
+    public void showBattle();
+    public void showRetreat();
+    public void showGameMain();
     //public void showHeroStats();
     //public void showMap();
     //public void createHero();
