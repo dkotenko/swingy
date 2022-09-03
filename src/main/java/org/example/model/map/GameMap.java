@@ -92,12 +92,12 @@ public class GameMap {
                 if (currY < 1 || currY > size || currX < 1 || currX > size) {
                     continue;
                 }
-                if (cells[currY][currX].containsMonster()) {
+                if (cells[currY][currX].containsHero()) {
+                    visibleMap.getCells()[i][j].setType(hero.getType());
+                } else if (cells[currY][currX].containsMonster()) {
                     visibleMap.getCells()[i][j].setType(
                             cells[currY][currX].getMonster().getType()
                     );
-                } else if (cells[currY][currX].containsHero()) {
-                    visibleMap.getCells()[i][j].setType(hero.getType());
                 } else {
                     visibleMap.getCells()[i][j].setType("Ground");
                 }

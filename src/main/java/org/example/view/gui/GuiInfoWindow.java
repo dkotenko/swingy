@@ -10,7 +10,14 @@ class GuiInfoWindow extends JDialog
     public GuiInfoWindow(JFrame owner, String title, String text)
     {
         super(owner, title, true);
-        setLocationRelativeTo(null);
+
+        setSize(250, 150);
+        int x = owner.getLocation().x + owner.getSize().width / 2 - getWidth() / 2;
+        int y = owner.getLocation().y + owner.getSize().height / 2 - getHeight() / 2;
+        //setLocationRelativeTo(null);
+        setLocation(new Point(
+                owner.getLocation().x + owner.getSize().width / 2 - getWidth() / 2,
+                owner.getLocation().y + owner.getSize().height / 2 - getHeight() / 2));
 
         // add HTML label to center
         add(new JLabel(text, SwingConstants.CENTER));
@@ -32,6 +39,6 @@ class GuiInfoWindow extends JDialog
         panel.add(ok);
         add(panel, BorderLayout.SOUTH);
 
-        setSize(250, 150);
+
     }
 }

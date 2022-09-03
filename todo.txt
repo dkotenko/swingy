@@ -1,0 +1,5 @@
+1. пометки в коде TODO
+2. кнопка changeview в gui
+3. gameover logo
+4. окно уведомлений не поцентру экрана
+5. баг: ui изменяется вид chooseHero после createHero

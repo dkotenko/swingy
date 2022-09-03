@@ -14,16 +14,14 @@ public class ConsoleMapLegend {
     public ConsoleMapLegend() {
         dict = new HashMap<>();
         dict.put("Hero", "@");
+        dict.put("Warrior", "@");
+        dict.put("Rogue", "@");
+        dict.put("Mage", "@");
         dict.put("HeavyBandit", "h");
         dict.put("Mushroom", "m");
         dict.put("Skeleton", "s");
         dict.put("Ground", ".");
         dict.put("Void", "#");
-        /*
-        dict.put("Warrior", "@");
-        dict.put("Rogue", "@");
-        dict.put("Mage", "@");
-        */
 
         legend = new ArrayList<>();
 

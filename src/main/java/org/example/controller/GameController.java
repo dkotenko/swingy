@@ -197,6 +197,10 @@ public class GameController {
         return new HeroDTO(gameModel.getCurrentHero()).toList();
     }
 
+    public String [][] provideHeroInfoArray() {
+        return new HeroDTO(gameModel.getCurrentHero()).toArray();
+    }
+
     public void startBattle() {
         updateGameState(GameState.START_BATTLE);
     }

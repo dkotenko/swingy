@@ -1,5 +1,6 @@
 package org.example.view.gui;
 
+import ch.qos.logback.core.Layout;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
@@ -16,6 +17,9 @@ import org.springframework.stereotype.Service;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.border.Border;
+import javax.swing.border.CompoundBorder;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -119,19 +123,34 @@ public class GuiView extends JFrame implements SwingyView {
         int mapLevel = gameController.getCurrHero().getLevel();
 
         //gameMainPanel panel
+        JPanel gamePanel = new JPanel();
         JPanel gameMainPanel = new JPanel();
         JPanel gameMapPanel = new JPanel();
 
-        setLayout(new BoxLayout(f, BoxLayout.Y_AXIS));
+        //vert strut between map upper border
+        gamePanel.add(Box.createVerticalStrut(20));
+
         gameMapPanel.add(new GuiMap(gameController.getVisibleMap()));
-        add(gameMapPanel);
+        gameMainPanel.add(gameMapPanel);
+
+        //horiz strut between map and info
+        gameMainPanel.add(Box.createHorizontalStrut(30));
 
         //hero info
         JPanel heroInfoPanel = new JPanel();
-        JLabel heroInfoLabel = createTextLabel("Hero info will be here");
-        heroInfoPanel.add(heroInfoLabel);
+        JTable heroInfoTable = new JTable(gameController.provideHeroInfoArray(), new String []{"param", "value"});
+        Border border = heroInfoPanel.getBorder();
+        Border margin = new EmptyBorder(100,10,10,10);
+        heroInfoPanel.setBorder(new CompoundBorder(border, margin));
 
-        add(heroInfoPanel);
+        heroInfoPanel.add(heroInfoTable);
+        gameMainPanel.add(heroInfoPanel);
+
+        gameMainPanel.setLayout(new BoxLayout(gameMainPanel, BoxLayout.X_AXIS));
+        gamePanel.add(gameMainPanel);
+
+        //vert strut between map and buttons
+        gamePanel.add(Box.createVerticalStrut(20));
 
         //Move buttons panel
         JPanel movePanel = new JPanel();
@@ -141,9 +160,16 @@ public class GuiView extends JFrame implements SwingyView {
         addMoveButton(movePanel, Directions.EAST, Messages.GO_EAST);
         addMoveButton(movePanel, Directions.WEST, Messages.GO_WEST);
         addReturnButton(movePanel, GameState.START_MENU, "Return to main menu");
-        add(movePanel);
+        gamePanel.add(movePanel);
+        gamePanel.setLayout(new BoxLayout(gamePanel, BoxLayout.Y_AXIS));
 
+        add(gamePanel);
         setVisible(true);
+        repaint();
+
+        if (gameController.isBattle()) {
+            return;
+        }
     }
 
     public void showNewHero() {
@@ -200,7 +226,7 @@ public class GuiView extends JFrame implements SwingyView {
         //vertical strut
         newHeroPanel.add(Box.createVerticalStrut(20));
 
-        setLayout(new FlowLayout());
+
         //Button new hero
 
         JButton createHero =new JButton(Messages.START_CREATE_HERO);//creating instance of JButton
@@ -231,7 +257,7 @@ public class GuiView extends JFrame implements SwingyView {
                 if (gameController.isHeroExists(heroName)) {
                     new GuiInfoWindow(f, "Info", 
                             String.format("New hero created: %s, the %s\n", heroName, heroClass)).setVisible(true);
-                    gameController.updateGameState(GameState.START_MENU);
+                    gameController.updateGameState(GameState.CHOOSE_HERO);
                 }
             }
         });
@@ -286,6 +312,7 @@ public class GuiView extends JFrame implements SwingyView {
                 if (isMoveExit) {
                     return;
                 }
+                gameController.setUiChanged(true);
             }
         });
         moveButton.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -293,6 +320,8 @@ public class GuiView extends JFrame implements SwingyView {
     }
 
     public void showChooseHero() {
+        setLayout(new FlowLayout());
+
         JPanel chooseHeroPanel = new JPanel();
         addSwingyLogo(chooseHeroPanel, Messages.CHOOSE_HERO_MESSAGE);
 
@@ -482,7 +511,15 @@ public class GuiView extends JFrame implements SwingyView {
         repaint();
     }
 
-    public void showBeforeBattle() {}
+    public void showBeforeBattle() {
+        System.out.println(String.format(
+                "You`ve met a monster - %s (chance to win - %.2f%%)",
+                gameController.getCurrentMonsterInfo(),
+                gameController.getLastBattleProbability() * 100
+        ));
+
+
+    }
     public void showBattle() {}
     public void showRetreat() {}
 

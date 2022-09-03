@@ -47,9 +47,9 @@ public class GuiMap extends JPanel {
         //populate header
         for (int i = 1; i <= visibleMap.getVisibleSize(); i++) {
             //column names
-            labelGrid[0][i] = createTextLabel(String.valueOf(
+            labelGrid[i][0] = createTextLabel(String.valueOf(
                     visibleMap.getCells()[1][i].getPosition().getX()));
-            add(labelGrid[0][i]);
+            add(labelGrid[i][0]);
         }
 
         for (int r = 1; r < labelGrid.length; r++) {
@@ -60,7 +60,7 @@ public class GuiMap extends JPanel {
 
             for (int c = 1; c < labelGrid[r].length; c++) {
                 labelGrid[r][c] = new JLabel();
-                VisibleMapCell currCell = visibleMap.getCells()[c][r];
+                VisibleMapCell currCell = visibleMap.getCells()[r][c];
                 setIconByType(currCell, labelGrid[r][c]);
                 add(labelGrid[r][c]);
             }
@@ -88,7 +88,13 @@ public class GuiMap extends JPanel {
     }
 
     private void setIconByType(VisibleMapCell currCell, JLabel jlabel) {
-        if (currCell.getType().equals(MonsterTypes.HEAVY_BANDIT)) {
+        if (currCell.getType().equals(HeroTypes.WARRIOR)) {
+            jlabel.setIcon(new ImageIcon(warriorIcon));
+        } else if (currCell.getType().equals(HeroTypes.ROGUE)) {
+            jlabel.setIcon(new ImageIcon(rogueIcon));
+        } else if (currCell.getType().equals(HeroTypes.MAGE)) {
+            jlabel.setIcon(new ImageIcon(mageIcon));
+        } else if (currCell.getType().equals(MonsterTypes.HEAVY_BANDIT)) {
             jlabel.setIcon(new ImageIcon(heavyBanditIcon));
         } else if (currCell.getType().equals(MonsterTypes.MUSHROOM)) {
             jlabel.setIcon(new ImageIcon(mushroomIcon));
@@ -96,12 +102,6 @@ public class GuiMap extends JPanel {
             jlabel.setIcon(new ImageIcon(skeletonIcon));
         } else if (currCell.getType().equals(VisibleCellTypes.GROUND)) {
             jlabel.setIcon(Ground.DIRT);
-        } else if (currCell.getType().equals(HeroTypes.WARRIOR)) {
-            jlabel.setIcon(new ImageIcon(warriorIcon));
-        } else if (currCell.getType().equals(HeroTypes.ROGUE)) {
-            jlabel.setIcon(new ImageIcon(rogueIcon));
-        } else if (currCell.getType().equals(HeroTypes.MAGE)) {
-            jlabel.setIcon(new ImageIcon(mageIcon));
         } else {
             jlabel.setIcon(Ground.WATER);
         }
