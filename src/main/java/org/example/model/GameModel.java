@@ -78,15 +78,15 @@ public class GameModel {
         heroRepository.saveAndFlush(new HeroDTO(currentHero));
     }
 
-    public void createHero(String name, String type) {
+    public String createHero(String name, String type) {
         Hero hero = new HeroFactory().create(name, type);
         try {
             validationService.validateHero(hero);
             heroRepository.saveAndFlush(new HeroDTO(hero));
         } catch (ConstraintViolationException e) {
-            System.out.println("Error: hero hadn't been created, invalid input:");
-            System.out.println(e.getMessage());
+            return e.getMessage();
         }
+        return null;
     }
 
     public void loadMap() {

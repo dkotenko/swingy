@@ -10,6 +10,7 @@ import org.example.controller.GameController;
 import org.example.model.GameState;
 import org.example.model.hero.dto.HeroDTO;
 import org.example.model.map.Directions;
+import org.example.service.battle.BattleResult;
 import org.example.view.Messages;
 import org.example.view.SwingyView;
 import org.example.view.ViewTypes;
@@ -57,6 +58,10 @@ public class GuiView extends JFrame implements SwingyView {
         showActions[GameState.CREATE_HERO.ordinal()] = this::showNewHero;
         showActions[GameState.CHOOSE_HERO.ordinal()] = this::showChooseHero;
         showActions[GameState.GAME_MAIN.ordinal()] = this::showGameMain;
+        showActions[GameState.BEFORE_BATTLE.ordinal()] = this::showBeforeBattle;
+        showActions[GameState.START_BATTLE.ordinal()] = this::showBattle;
+        showActions[GameState.EXIT_MAP_QUESTION.ordinal()] = this::showExitMapQuestion;
+        showActions[GameState.RETREAT.ordinal()] = this::showRetreat;
     }
 
     private void setUpFrame() {
@@ -159,7 +164,8 @@ public class GuiView extends JFrame implements SwingyView {
         addMoveButton(movePanel, Directions.SOUTH, Messages.GO_SOUTH);
         addMoveButton(movePanel, Directions.EAST, Messages.GO_EAST);
         addMoveButton(movePanel, Directions.WEST, Messages.GO_WEST);
-        addReturnButton(movePanel, GameState.START_MENU, "Return to main menu");
+        addReturnButton(movePanel, GameState.START_MENU, "Return");
+        addChangeViewButton(movePanel);
         gamePanel.add(movePanel);
         gamePanel.setLayout(new BoxLayout(gamePanel, BoxLayout.Y_AXIS));
 
@@ -253,8 +259,10 @@ public class GuiView extends JFrame implements SwingyView {
                     return;
                 }
 
-                gameController.createHero(heroName, heroClass);
-                if (gameController.isHeroExists(heroName)) {
+                String error = gameController.createHero(heroName, heroClass);
+                if (StringUtils.isNotBlank(error)) {
+                    new GuiInfoWindow(f, "Invalid input", error).setVisible(true);
+                } else if (gameController.isHeroExists(heroName)) {
                     new GuiInfoWindow(f, "Info", 
                             String.format("New hero created: %s, the %s\n", heroName, heroClass)).setVisible(true);
                     gameController.updateGameState(GameState.CHOOSE_HERO);
@@ -280,11 +288,31 @@ public class GuiView extends JFrame implements SwingyView {
         chooseHeroButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                if (gameController.getCurrHero() != null) {
+                    gameController.updateHero();
+                }
                 gameController.updateGameState(state);
             }
         });
         chooseHeroButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         panel.add(chooseHeroButton);
+    }
+
+    public void addChangeViewButton(JPanel panel) {
+        //vertical strut
+        panel.add(Box.createVerticalStrut(10));
+
+        //button
+        JButton changeViewButton = new JButton("Change view");//creating instance of JButton
+        changeViewButton.setBounds(330,100,100, 40);
+        changeViewButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                gameController.changeView(gameController.getCurrView());
+            }
+        });
+        changeViewButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        panel.add(changeViewButton);
     }
 
     public void addMoveButton(JPanel panel, Directions direction, String text) {
@@ -365,9 +393,6 @@ public class GuiView extends JFrame implements SwingyView {
                 int id = Integer.parseInt(jTable.getModel().getValueAt(row, column).toString());
 
                 HeroDTO heroDTO = heroesList.get(id - 1);
-                System.out.println(String.format("The game for %s (%s) is starting now",
-                        heroDTO.getName(),
-                        heroDTO.getType()));
                 gameController.chooseHero(heroDTO);
                 gameController.startGame();
             }
@@ -450,16 +475,47 @@ public class GuiView extends JFrame implements SwingyView {
         }
     }
 
-    public void showExitMapQuestion() {}
+    public void showExitMapQuestion() {
+        JPanel panel = new JPanel();
+
+        JLabel label = new JLabel(Messages.EXIT_MAP_QUESTION);
+        panel.add(label);
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        //Button quit
+        JPanel actionButtonsPanel = new JPanel();
+        actionButtonsPanel.setLayout(new BoxLayout(actionButtonsPanel, BoxLayout.X_AXIS));
+        JButton nextMapButton = new JButton("Go to next map");//creating instance of JButton
+        nextMapButton.setBounds(130,100,100, 40);
+        nextMapButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                gameController.loadNextMap();
+            }
+        });
+        nextMapButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        actionButtonsPanel.add(nextMapButton);
+
+        //Button go to menu
+        JButton toMenuButton = new JButton("Go to menu");//creating instance of JButton
+        toMenuButton.setBounds(330,100,100, 40);
+        toMenuButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                gameController.returnToStartMenu();
+            }
+        });
+        toMenuButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        actionButtonsPanel.add(toMenuButton);
+        panel.add(actionButtonsPanel);
+        add(panel);
+        setVisible(true);
+    }
 
     public void showStartMenu() {
 
         //Welcome panel
         JPanel welcomePanel = new JPanel();
         addSwingyLogo(welcomePanel, Messages.START_WELCOME_MESSAGE);
-
-        //vertical strut
-        welcomePanel.add(Box.createVerticalStrut(10));
 
         //Button start game
         JButton startGameButton = new JButton(Messages.START_START_GAME);//creating instance of JButton
@@ -474,8 +530,6 @@ public class GuiView extends JFrame implements SwingyView {
         startGameButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         welcomePanel.add(startGameButton);
 
-        //vertical strut
-        welcomePanel.add(Box.createVerticalStrut(10));
 
         //Button quit
         JButton quitButton = new JButton(Messages.START_QUIT);//creating instance of JButton
@@ -487,7 +541,14 @@ public class GuiView extends JFrame implements SwingyView {
             }
         });
         quitButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        addChangeViewButton(welcomePanel);
+
+        //vertical strut
+        welcomePanel.add(Box.createVerticalStrut(10));
+
         welcomePanel.add(quitButton);
+
 
         //add panel to the frame
         add(welcomePanel);
@@ -512,16 +573,29 @@ public class GuiView extends JFrame implements SwingyView {
     }
 
     public void showBeforeBattle() {
-        System.out.println(String.format(
-                "You`ve met a monster - %s (chance to win - %.2f%%)",
-                gameController.getCurrentMonsterInfo(),
-                gameController.getLastBattleProbability() * 100
-        ));
-
-
+        new GuiBeforeBattle(this,"You have met a monster!", gameController).setVisible(true);
     }
-    public void showBattle() {}
-    public void showRetreat() {}
+
+    public void showBattle() {
+        BattleResult result = gameController.doBattle();
+        if (result.isHeroWon() == false) {
+            new GuiInfoWindow(f, "Battle result", Messages.HERO_DIED_GUI).setVisible(true);
+            gameController.killHero();
+        } else {
+            new GuiRewardsWindow(f, "Battle result", gameController, result).setVisible(true);
+            gameController.startGame();
+        }
+    }
+
+    public void showRetreat() {
+        if (gameController.isRetreatSuccessful()) {
+            new GuiInfoWindow(f, "Retreat", Messages.RETREAT_SUCCESSFULLY).setVisible(true);
+            gameController.doRetreat();
+        } else {
+            new GuiInfoWindow(f, "Retreat", Messages.RETREAT_FAILURE).setVisible(true);
+            gameController.startBattle();
+        }
+    }
 
     private BufferedImage getImage(String name) {
         BufferedImage image;

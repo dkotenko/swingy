@@ -14,6 +14,8 @@ public class BattleResult {
     private int heroDamage;
     private int monsterDamage;
     private int gainedExp;
+    private int newLvl;
+    private String heroName;
 
     public boolean hasRewards() {
         return (rewards != null && rewards.size() > 0);
@@ -22,6 +24,9 @@ public class BattleResult {
     public String toString() {
         StringBuilder builder = new StringBuilder();
         builder.append("Battle result:\n");
+        if (newLvl != 0) {
+            builder.append(String.format("Congratulations! %s has reached level %d\n", heroName, newLvl));
+        }
         builder.append("Hero inflicted " + heroDamage + " damage\n");
         builder.append("Monster inflicted " + monsterDamage + " damage\n");
         builder.append((isHeroWon ? "Hero has won" : "Hero died") + "\n");

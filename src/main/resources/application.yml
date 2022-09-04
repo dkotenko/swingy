@@ -16,7 +16,7 @@ spring:
 
 swingy:
   random:
-    spread: 0.2
+    spread: 0.5
   battle:
     simulation:
       times: 100

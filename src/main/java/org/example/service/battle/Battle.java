@@ -72,6 +72,7 @@ public class Battle {
     public static BattleResult doBattle(Hero hero, Monster monster, boolean print)
     {
         BattleResult battleResult = doFight(hero, monster, print);
+        int heroLvl = hero.getLevel();
 
         if (hero.getHp() <= 0) {
             if (print) {
@@ -83,6 +84,10 @@ public class Battle {
             hero.gainExp(monster.getExp());
             battleResult.setGainedExp(monster.getExp());
             battleResult.setRewards(getRewards(monster));
+            battleResult.setHeroName(hero.getName());
+            if (heroLvl != hero.getLevel()) {
+                battleResult.setNewLvl(hero.getLevel());
+            }
 
         }
         return battleResult;

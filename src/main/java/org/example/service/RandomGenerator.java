@@ -8,8 +8,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class RandomGenerator {
-    @Value("${swingy.random.spread:0.2}")
-    private static double spread;
+    private static double spread = 0.4;
     private static ArrayList<String> monsterTypes = MonsterTypes.getMonsterTypes();
     private static Random random = new Random();
 

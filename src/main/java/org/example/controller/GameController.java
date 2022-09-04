@@ -93,8 +93,8 @@ public class GameController {
         //invoke View
     }
 
-    public void createHero(String name, String type) {
-        gameModel.createHero(name, type);
+    public String createHero(String name, String type) {
+        return gameModel.createHero(name, type);
     }
 
     public void updateHero() {
@@ -126,7 +126,6 @@ public class GameController {
         updateGameState(gameModel.getPreviousState());
     }
 
-    //TODO check "change"
     public void changeView(SwingyView oldView) {
         oldView.deactivate();
         for (SwingyView view: views) {
@@ -210,7 +209,8 @@ public class GameController {
     }
 
     public void doRetreat() {
-        gameModel.doRetreat();
+        retreatToSafeCell();
+        updateGameState(GameState.GAME_MAIN);
     }
 
     public void cleanHeroExp() {
@@ -232,4 +232,27 @@ public class GameController {
     public void equipItem(Item item) {
         gameModel.getCurrentHero().equipItem(item);
     }
+
+    public void killHero() {
+        cleanHeroExp();
+        updateHero();
+        updateGameState(GameState.START_MENU);
+    }
+
+    public boolean isRetreatSuccessful() {
+        return getRetreatProbability() < 50.;
+    }
+
+    public void returnToStartMenu() {
+        updateHero();
+        updateGameState(GameState.START_MENU);
+    }
+
+    public void loadNextMap() {
+        loadMap();
+        updateHero();
+        updateGameState(GameState.GAME_MAIN);
+    }
+
+
 }

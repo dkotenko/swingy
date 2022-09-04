@@ -53,10 +53,7 @@ public class ConsoleView implements SwingyView {
         System.out.println(result.toString());
         if (result.isHeroWon() == false) {
             System.out.println(Messages.HERO_DIED);
-            gameController.cleanHeroExp();
-            gameController.updateHero();
-            gameController.updateGameState(GameState.START_MENU);
-            return;
+            gameController.killHero();
         } else if (result.hasRewards()) {
             result.getRewards().forEach(item -> {
 
@@ -78,17 +75,16 @@ public class ConsoleView implements SwingyView {
                 }
             });
         }
-        gameController.updateGameState(GameState.GAME_MAIN);
+        gameController.startGame();
     }
 
     public void showRetreat() {
-        if (gameController.getRetreatProbability() > 50.) {
+        if (gameController.isRetreatSuccessful()) {
             System.out.println(Messages.RETREAT_SUCCESSFULLY);
-            gameController.retreatToSafeCell();
-            gameController.updateGameState(GameState.GAME_MAIN);
+            gameController.doRetreat();
         } else {
             System.out.println(Messages.RETREAT_FAILURE);
-            gameController.updateGameState(GameState.START_BATTLE);
+            gameController.startBattle();
         }
     }
 
@@ -151,7 +147,6 @@ public class ConsoleView implements SwingyView {
         }
     }
 
-    // TODO Validate hero name
     private void createHero() {
         String name = "";
         int n = 0;
@@ -181,8 +176,11 @@ public class ConsoleView implements SwingyView {
 
         n = readInt(choice);
         String [] types = new String[]{"", "Warrior", "Rogue", "Mage"};
-        gameController.createHero(name, types[n]);
-        if (gameController.isHeroExists(name)) {
+        String error = gameController.createHero(name, types[n]);
+        if (StringUtils.isNotBlank(error)) {
+            System.out.println(error);
+        }
+        else if (gameController.isHeroExists(name)) {
             System.out.println(String.format("New hero created: %s, the %s\n", name, types[n]));
         }
     }
@@ -385,15 +383,9 @@ public class ConsoleView implements SwingyView {
             }
         }
         if (choice == 1) {
-            gameController.loadMap();
-            gameController.updateHero();
-            gameController.updateGameState(GameState.GAME_MAIN);
-            return;
-
+            gameController.loadNextMap();
         } else {
-            gameController.updateHero();
-            gameController.updateGameState(GameState.START_MENU);
-            return;
+            gameController.returnToStartMenu();
         }
 
     }

@@ -66,9 +66,6 @@ public abstract class Hero extends Creature {
             level++;
             currExp -= nextLevelExp;
             nextLevelExp = countLevelExp(level);
-            System.out.println(String.format(
-                    "Congratulations! Hero %s reached level %d", name, level
-            ));
         }
     }
 

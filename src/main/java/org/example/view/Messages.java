@@ -20,8 +20,8 @@ public class Messages {
     public static final String START_QUIT = "Quit game";
 
     public static final String CREATE_HERO_MESSAGE = "Create new hero";
-    public static final String CREATE_HERO_INPUT_NAME = "Input hero name:";
-    public static final String CREATE_HERO_CHOOSE_CLASS = "Choose hero class:";
+    public static final String CREATE_HERO_INPUT_NAME = "Input hero name";
+    public static final String CREATE_HERO_CHOOSE_CLASS = "Choose hero class";
     public static final String CREATE_HERO_ALREADY_EXISTS = "Hero with name %s already exists. Please choose another one";
 
 
@@ -48,7 +48,8 @@ public class Messages {
     public static final String RETREAT_SUCCESSFULLY = "You`ve successfully retreated";
     public static final String RETREAT_FAILURE = "You`ve failed to retreat. Prepare for battle!";
 
-    public static final String HERO_DIED = "|\tHero is dead :( \n|\tYou will be returned to the main menu";
+    public static final String HERO_DIED = "\tHero is dead :( \n\tYou will be returned to the main menu";
+    public static final String HERO_DIED_GUI = "<html>Hero is dead :( </br>You will be returned to the main menu</html>";
 
     public static final String REWARD_PICK = "Pick item";
     public static final String REWARD_LEAVE = "Leave item";
