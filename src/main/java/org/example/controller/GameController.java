@@ -144,6 +144,11 @@ public class GameController {
         gameModel.loadMap();
     }
 
+
+    public void continueGame() {
+        updateGameState(GameState.GAME_MAIN);
+    }
+
     public void startGame() {
         gameModel.loadMap();
         updateGameState(GameState.GAME_MAIN);

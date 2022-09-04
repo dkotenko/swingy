@@ -74,8 +74,8 @@ public class ConsoleView implements SwingyView {
                     System.out.println(Messages.INVALID_INPUT);
                 }
             });
+            gameController.continueGame();
         }
-        gameController.startGame();
     }
 
     public void showRetreat() {

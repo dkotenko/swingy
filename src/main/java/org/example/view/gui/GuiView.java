@@ -477,10 +477,16 @@ public class GuiView extends JFrame implements SwingyView {
 
     public void showExitMapQuestion() {
         JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+
 
         JLabel label = new JLabel(Messages.EXIT_MAP_QUESTION);
+        label.setAlignmentX(Component.CENTER_ALIGNMENT);
         panel.add(label);
-        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+
+        //vertical strut
+        panel.add(Box.createVerticalStrut(10));
+
         //Button quit
         JPanel actionButtonsPanel = new JPanel();
         actionButtonsPanel.setLayout(new BoxLayout(actionButtonsPanel, BoxLayout.X_AXIS));
@@ -583,7 +589,7 @@ public class GuiView extends JFrame implements SwingyView {
             gameController.killHero();
         } else {
             new GuiRewardsWindow(f, "Battle result", gameController, result).setVisible(true);
-            gameController.startGame();
+            gameController.continueGame();
         }
     }
 
