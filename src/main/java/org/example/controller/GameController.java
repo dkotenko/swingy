@@ -154,6 +154,14 @@ public class GameController {
         updateGameState(GameState.GAME_MAIN);
     }
 
+    public void startChooseHero() {
+        updateGameState(GameState.CHOOSE_HERO);
+    }
+
+    public void startCreateHero() {
+        updateGameState(GameState.CHOOSE_HERO);
+    }
+
     public VisibleMap provideVisibleMap() {
 
         return gameModel.getGameMap().createVisibleMap();

@@ -129,9 +129,6 @@ public class ConsoleView implements SwingyView {
                 gameController.returnToParentGameState();
 
              */
-            } else if ("change".equals(line)) {
-                gameController.changeView(this);
-                break ;
             } else if (StringUtils.isBlank(line)) {
                 continue;
             }
@@ -150,6 +147,8 @@ public class ConsoleView implements SwingyView {
     private void createHero() {
         String name = "";
         int n = 0;
+        gameController.startCreateHero();
+
         while (true) {
             System.out.println("Enter new hero name:");
             name = readLine();
@@ -225,6 +224,8 @@ public class ConsoleView implements SwingyView {
         int choice = 0;
         int n = 0;
         boolean isChosen = false;
+        gameController.startChooseHero();
+
         while (choice < 1 || choice > heroes.size()) {
             int i = 0;
 
@@ -245,7 +246,8 @@ public class ConsoleView implements SwingyView {
             System.out.println(String.format("%d. %s", i + 1, Messages.RETURN_PREV));
 
             String line = readLine();
-            if ("change".equals(choice)) {
+            if ("change".equals(line)) {
+                isChosen = true; //dirty; exit loop in parent func
                 return isChosen;
             }
 
@@ -284,13 +286,11 @@ public class ConsoleView implements SwingyView {
         while (true) {
             System.out.println("\nAvailable actions:");
             System.out.println("1. " + Messages.START_START_GAME);
-            System.out.println("2. " + Messages.START_QUIT + "\n");
+            System.out.println("2. Change view");
+            System.out.println("3. " + Messages.START_QUIT + "\n");
 
             String choice = readLine();
             System.out.println("");
-            if ("change".equals(choice)) {
-                return;
-            }
 
             int n = readInt(choice);
             if (n == 1) {
@@ -298,6 +298,10 @@ public class ConsoleView implements SwingyView {
                     break;
                 }
             } else if (n == 2) {
+                System.out.println(Messages.VIEW_CHANGED_GUI);
+                gameController.changeView(this);
+                return;
+            } else if (n == 3) {
                 System.exit(0);
             }
             else {
@@ -326,13 +330,10 @@ public class ConsoleView implements SwingyView {
             System.out.println("2. " + Messages.GO_EAST);
             System.out.println("3. " + Messages.GO_SOUTH);
             System.out.println("4. " + Messages.GO_WEST);
-            System.out.println("\n5. " + Messages.RETURN_PREV
-            );
+            System.out.println("\n5. Change view");
+            System.out.println("6. " + Messages.RETURN_PREV);
 
             String choice = readLine();
-            if ("change".equals(choice)) {
-                return;
-            }
             int n = readInt(choice);
             if (n == 1) {
                 isMoveExit = gameController.moveNorth();
@@ -343,6 +344,10 @@ public class ConsoleView implements SwingyView {
             } else if (n == 4) {
                 isMoveExit = gameController.moveWest();
             } else if (n == 5) {
+                System.out.println(Messages.VIEW_CHANGED_GUI);
+                gameController.changeView(this);
+                return;
+            } else if (n == 6) {
                 gameController.updateHero();
                 updateGameState(GameState.START_MENU);
                 return;

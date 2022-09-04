@@ -55,4 +55,6 @@ public class Messages {
     public static final String REWARD_LEAVE = "Leave item";
 
     public static final String RETURN = "return";
+
+    public static final String VIEW_CHANGED_GUI = "View changed to GUI";
 }
